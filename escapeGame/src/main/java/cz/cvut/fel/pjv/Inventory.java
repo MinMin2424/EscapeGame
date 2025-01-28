@@ -1,9 +1,6 @@
 package cz.cvut.fel.pjv;
 
-import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
-
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Inventory {
@@ -30,26 +27,16 @@ public class Inventory {
 
     // Metoda pro odebrání předmětu z inventáře
     public void removeItem(Item item) {
-        for (Item i: items) {
-            if (i.getName().equals(item.getName())) {
-                if (i.getQuantity() > 1) {
-                    i.setQuantity(i.getQuantity() - 1);
+        for (int i = 0; i < items.size(); i++) {
+            Item currentItem = items.get(i);
+            if (currentItem.getName().equals(item.getName())) {
+                if (currentItem.getQuantity() > 1) {
+                    currentItem.setQuantity(currentItem.getQuantity() - 1);
                 } else {
-                    items.remove(item);
+                    items.remove(i);
                 }
                 break;
             }
-        }
-    }
-
-    // Metoda pro vytvoření nového předmětu a přidání jej do inventáře
-    public void craftItem(CraftingItems craftingItems) {
-        Item newItem = ItemFactory.createItem(craftingItems, (Inventory) items);
-        if (newItem != null) {
-            addItem(newItem);
-            System.out.println("Vytvořen nový předmět: " + newItem.getName());
-        } else {
-            System.out.println("Neznámý typ předmětu.");
         }
     }
 

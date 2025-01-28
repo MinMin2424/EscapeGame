@@ -45,9 +45,6 @@ public class Player {
     // Metoda pro ztrátu životů
     public void loseHealth(int damage) {
         health -= damage;
-        if (health <= 0) {
-            System.out.println("Hráč zemřel. Konec hry.");
-        }
     }
 
     // Metoda pro ztrátu životů při interakci s překážkami

@@ -1,6 +1,8 @@
 package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
+import cz.cvut.fel.pjv.gameObjects_Items.GameNextLevel;
+
 import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.HERB;
 import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.ORE;
 import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.WATER_ITEM;
@@ -15,13 +17,12 @@ public class GamePosition {
     public void startGame() {
         GameBoard gameBoard = new GameBoard();
         Player player = new Player(9, 0);
-        PlayerController playerController = new PlayerController(gameBoard);
+        PlayerController playerController = new PlayerController(player, gameBoard);
 
         gameBoard.placePlayer(player);
 
-
         gameBoard.placeObject(WALL, 1, 1); gameBoard.placeObject(WALL, 1, 2); gameBoard.placeObject(WALL, 1, 3);
-        gameBoard.placeObject(WALL, 1, 4); gameBoard.placeObject(WALL, 1, 5); gameBoard.placeObject(WALL, 1, 8);
+        gameBoard.placeObject(WALL, 1, 4); gameBoard.placeObject(WALL, 1, 5); gameBoard.placeObject(WATER, 1, 8);
         gameBoard.placeObject(WATER, 1, 9);
 
         gameBoard.placeObject(WALL, 2, 1); gameBoard.placeObject(WALL, 2, 8);
@@ -52,12 +53,31 @@ public class GamePosition {
         gameBoard.placeItem(ORE, 8, 2);
         gameBoard.placeItem(ORE, 7, 2);
         gameBoard.placeItem(ORE, 6, 2);
+        gameBoard.placeItem(WATER_ITEM, 5, 2);
+        gameBoard.placeItem(HERB, 5, 1);
+        gameBoard.placeItem(HERB, 5, 0);
+        gameBoard.placeItem(KEY, 2, 9);
 
-        playerController.moveRight(player);
-        playerController.moveRight(player);
-        playerController.moveUp(player);
-        playerController.moveUp(player);
-        playerController.moveUp(player);
+        gameBoard.placeNextLevel(GameNextLevel.NEXT_LEVEL, 9, 9);
+
+        playerController.moveRight();
+        playerController.moveRight();
+        playerController.moveUp();
+        playerController.moveUp();
+        playerController.moveUp();
+        playerController.moveUp();
+        playerController.moveLeft();
+        playerController.moveLeft();
+        playerController.moveRight();
+        playerController.moveUp();
+        playerController.moveRight();
+        playerController.moveRight();
+        playerController.moveRight();
+        playerController.moveRight();
+        playerController.moveRight();
+        playerController.moveRight();
+        playerController.moveDown();
+
 
         gameBoard.drawBoard();
 
@@ -65,6 +85,10 @@ public class GamePosition {
         System.out.println(player.getHealth());
         player.craftItem(CraftingItems.SWORD);
         System.out.println(player.getInventory());
+        System.out.println(" ");
+        player.craftItem(CraftingItems.POTION);
+        System.out.println(player.getInventory());
+
 
     }
 }

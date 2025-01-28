@@ -1,6 +1,6 @@
 package cz.cvut.fel.pjv;
 
-
+import cz.cvut.fel.pjv.gameObjects_Items.GameNextLevel;
 import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
 import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
 
@@ -49,6 +49,13 @@ public class GameBoard {
         }
     }
 
+    // Metoda pro umístění pole do dalšího levelu
+    public void placeNextLevel(GameNextLevel gameNextLevel, int x, int y) {
+        if (x >= 0 && x < NUMBER_OF_SQUARES && y >= 0 && y < NUMBER_OF_SQUARES) {
+            board[x][y] = gameNextLevel.getCode();
+        }
+    }
+
     // Metoda pro vykreslení herního pole
     public void drawBoard() {
         for (int i = 0; i < NUMBER_OF_SQUARES; i++) {
@@ -72,6 +79,8 @@ public class GameBoard {
                         System.out.print("VS "); // Voda - surovina
                     } else if (board[i][j] == GameItems.KEY.getCode()) {
                         System.out.print("KE "); // Klíč
+                    } else if (board[i][j] == GameNextLevel.NEXT_LEVEL.getCode()) {
+                        System.out.println("NL "); // Next Level
                     } else {
                         System.out.print("-  "); // Prázdné pole
                     }

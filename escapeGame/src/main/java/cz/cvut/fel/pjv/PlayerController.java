@@ -5,16 +5,22 @@ import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
 
 public class PlayerController {
 
+    private Player player;
     private GameBoard gameBoard;
 
-    public PlayerController(GameBoard gameBoard) {
+    public PlayerController(Player player, GameBoard gameBoard) {
+        this.player = player;
         this.gameBoard = gameBoard;
     }
 
     // Metoda pro pohyb hráče nahorů
-    public void moveUp(Player player) {
+    public void moveUp() {
         int currentX = player.getPlayerX();
         int currentY = player.getPlayerY();
+
+        if (checkPlayerHealth()) {
+            return;
+        }
 
         if (currentX <= 0) {
             return; // Hráč se nachází na horním okraji herního pole, nemůže se pohnout výše
@@ -44,9 +50,13 @@ public class PlayerController {
     }
 
     // Metoda pro pohyb hráče dolů
-    public void moveDown(Player player) {
+    public void moveDown() {
         int currentX = player.getPlayerX();
         int currentY = player.getPlayerY();
+
+        if (checkPlayerHealth()) {
+            return;
+        }
 
         if (currentX >= gameBoard.getBoard().length - 1) {
             return; // Hráč se nachází na dolním okraji herního pole, nemůže se pohnout níže
@@ -77,9 +87,13 @@ public class PlayerController {
 
 
     // Metoda pro pohyb hráče doleva
-    public void moveLeft(Player player) {
+    public void moveLeft() {
         int currentX = player.getPlayerX();
         int currentY = player.getPlayerY();
+
+        if (checkPlayerHealth()) {
+            return;
+        }
 
         if (currentY <= 0) {
             return; // Hráč se nachází na levým okraji herního pole, nemůže se pohnout doleva
@@ -109,9 +123,13 @@ public class PlayerController {
     }
 
     // Metoda pro pohyb hráče doprava
-    public void moveRight(Player player) {
+    public void moveRight() {
         int currentX = player.getPlayerX();
         int currentY = player.getPlayerY();
+
+        if (checkPlayerHealth()) {
+            return;
+        }
 
         if (currentY > gameBoard.getBoard().length - 1) {
             return; // Hráč se nachází na pravým okraji herního pole, nemůže se pohnout doprava
@@ -139,6 +157,15 @@ public class PlayerController {
         }
 
     }
+
+    private boolean checkPlayerHealth() {
+        if (player.getHealth() <= 0) {
+            System.out.println("Hráč nemá dostatek životů. Konec hry");
+            return true;
+        }
+        return false;
+    }
+
 
 }
 
