@@ -102,7 +102,7 @@ public class PlayerController {
             }
             // Přesun hráče na novou pozici
             gameBoard.getBoard()[currentX][currentY] = 0; // Odebrání hráče z aktuální pozice
-            player.setPlayerY(currentY - 1); // Nastavení nové X-ové souřadnice hráče
+            player.setPlayerY(currentY - 1); // Nastavení nové Y-ové souřadnice hráče
             gameBoard.placePlayer(player); // Umístění hráče na novou pozici
         }
 
@@ -134,7 +134,7 @@ public class PlayerController {
             }
             // Přesun hráče na novou pozici
             gameBoard.getBoard()[currentX][currentY] = 0; // Odebrání hráče z aktuální pozice
-            player.setPlayerY(currentY + 1); // Nastavení nové X-ové souřadnice hráče
+            player.setPlayerY(currentY + 1); // Nastavení nové Y-ové souřadnice hráče
             gameBoard.placePlayer(player); // Umístění hráče na novou pozici
         }
 

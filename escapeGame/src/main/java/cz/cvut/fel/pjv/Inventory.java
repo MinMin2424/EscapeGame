@@ -1,6 +1,9 @@
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
+
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class Inventory {
@@ -40,8 +43,8 @@ public class Inventory {
     }
 
     // Metoda pro vytvoření nového předmětu a přidání jej do inventáře
-    public void craftItem(String type) {
-        Item newItem = ItemFactory.createItem(type);
+    public void craftItem(CraftingItems craftingItems) {
+        Item newItem = ItemFactory.createItem(craftingItems, (Inventory) items);
         if (newItem != null) {
             addItem(newItem);
             System.out.println("Vytvořen nový předmět: " + newItem.getName());

@@ -1,5 +1,6 @@
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
 import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
 
@@ -72,5 +73,17 @@ public class Player {
         inventory.removeItem(item);
         System.out.println("Předmět " + item.getName() + " byl použit.");
     }
+
+    // Metoda pro vytvoření nového předmětu a přidání jej do inventáře
+    public void craftItem(CraftingItems craftingItems) {
+        Item newItem = ItemFactory.createItem(craftingItems, inventory);
+        if (newItem != null) {
+            inventory.addItem(newItem);
+            System.out.println("Vytvořen nový předmět: " + newItem.getName());
+        } else {
+            System.out.println("Neznámý typ předmětu.");
+        }
+    }
+
 
 }

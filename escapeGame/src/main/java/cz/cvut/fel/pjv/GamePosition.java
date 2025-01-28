@@ -1,5 +1,6 @@
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
 import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.HERB;
 import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.ORE;
 import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.WATER_ITEM;
@@ -49,23 +50,22 @@ public class GamePosition {
         gameBoard.placeObject(WALL, 9, 6); gameBoard.placeObject(WALL, 9, 7); gameBoard.placeObject(WALL, 9, 8);
 
         gameBoard.placeItem(ORE, 8, 2);
-        gameBoard.placeItem(WATER_ITEM, 7, 2);
+        gameBoard.placeItem(ORE, 7, 2);
+        gameBoard.placeItem(ORE, 6, 2);
 
         playerController.moveRight(player);
         playerController.moveRight(player);
         playerController.moveUp(player);
         playerController.moveUp(player);
         playerController.moveUp(player);
-        playerController.moveUp(player);
-        playerController.moveUp(player);
-        playerController.moveLeft(player);
-        playerController.moveDown(player);
-        playerController.moveDown(player);
 
         gameBoard.drawBoard();
 
         System.out.println(player.getInventory());
         System.out.println(player.getHealth());
+        player.craftItem(CraftingItems.SWORD);
+        System.out.println(player.getInventory());
+
     }
 }
 
