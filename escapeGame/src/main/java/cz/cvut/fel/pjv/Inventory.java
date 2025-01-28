@@ -40,11 +40,6 @@ public class Inventory {
         }
     }
 
-    // Metoda k ověření, zda je předmět obsažen v inventáři
-    public boolean containsItem(Item item) {
-        return items.contains(item);
-    }
-
     // Metoda pro získání seznamu předmětů v inventáři
     public List<Item> getItems() {
         return items;

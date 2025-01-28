@@ -1,170 +1,129 @@
 package cz.cvut.fel.pjv;
 
+import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
+import cz.cvut.fel.pjv.gameObjects_Items.GameNextLevel;
 import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
+import cz.cvut.fel.pjv.direction.Direction;
+
 
 public class PlayerController {
 
-    private Player player;
-    private GameBoard gameBoard;
+    private final Player player;
+    private final GameBoard gameBoard;
 
     public PlayerController(Player player, GameBoard gameBoard) {
         this.player = player;
         this.gameBoard = gameBoard;
     }
 
-    // Metoda pro pohyb hráče nahorů
-    public void moveUp() {
+    //Metoda pro pohyb hráče
+    public void move(Direction direction) {
+        // Aktuální pozice hráče
         int currentX = player.getPlayerX();
         int currentY = player.getPlayerY();
 
+        // Zjistí, zda hráč má život na další move
         if (checkPlayerHealth()) {
             return;
         }
 
-        if (currentX <= 0) {
-            return; // Hráč se nachází na horním okraji herního pole, nemůže se pohnout výše
+        // Nová pozice hráče
+        int newX = currentX;
+        int newY = currentY;
+
+        switch (direction) {
+            case UP:
+                newX--;
+                break;
+            case DOWN:
+                newX++;
+                break;
+            case LEFT:
+                newY--;
+                break;
+            case RIGHT:
+                newY++;
+                break;
+            default:
+                System.out.println("Neznámý směr pohybu.");
+                return;
         }
 
-        int objectCode = gameBoard.getBoard()[currentX - 1][currentY];
+        //Zjistí, zda nová pozice vychází mimo herní pole
+        if (newX < 0 || newX >= gameBoard.getBoard().length || newY < 0 || newY >= gameBoard.getBoard()[0].length) {
+            return;
+        }
+
+        int objectCode = gameBoard.getBoard()[newX][newY];
 
         if (objectCode == GameObjects.WALL.getCode()) {
             return; // Nečinnost, hráč nemůže projít zdí
         }
 
-        GameObjects object = GameObjects.getByCode(objectCode);
-        if (object != null && object.isDamage()) {
-            player.collideWithObstacle(object);
-        } else {
-            GameItems item = GameItems.getByCode(objectCode);
-            if (item != null) {
-                player.collideWithItem(item);
-                gameBoard.getBoard()[currentX - 1][currentY] = 0; // Odebrání surovin
+        if (objectCode == GameNextLevel.NEXT_LEVEL.getCode()) {
+            if (!handleNextLevel()) {
+                return;
             }
-            // Přesun hráče na novou pozici
-            gameBoard.getBoard()[currentX][currentY] = 0; // Odebrání hráče z aktuální pozice
-            player.setPlayerX(currentX - 1); // Nastavení nové X-ové souřadnice hráče
-            gameBoard.placePlayer(player); // Umístění hráče na novou pozici
-        }
-
-    }
-
-    // Metoda pro pohyb hráče dolů
-    public void moveDown() {
-        int currentX = player.getPlayerX();
-        int currentY = player.getPlayerY();
-
-        if (checkPlayerHealth()) {
+            // Přechod na další level ...
+            GamePosition2 gamePosition2 = new GamePosition2();
+            gamePosition2.startGame();
             return;
         }
 
-        if (currentX >= gameBoard.getBoard().length - 1) {
-            return; // Hráč se nachází na dolním okraji herního pole, nemůže se pohnout níže
-        }
-
-        int objectCode = gameBoard.getBoard()[currentX + 1][currentY];
-
-        if (objectCode == GameObjects.WALL.getCode()) {
-            return; // Nečinnost, hráč nemůže projít zdí
-        }
-
         GameObjects object = GameObjects.getByCode(objectCode);
         if (object != null && object.isDamage()) {
-            player.collideWithObstacle(object);
-        } else {
-            GameItems item = GameItems.getByCode(objectCode);
-            if (item != null) {
-                player.collideWithItem(item);
-                gameBoard.getBoard()[currentX + 1][currentY] = 0; // Odebrání surovin
-            }
-            // Přesun hráče na novou pozici
-            gameBoard.getBoard()[currentX][currentY] = 0; // Odebrání hráče z aktuální pozice
-            player.setPlayerX(currentX + 1); // Nastavení nové X-ové souřadnice hráče
-            gameBoard.placePlayer(player); // Umístění hráče na novou pozici
-        }
+            if (object == GameObjects.FIRE && hasItem(GameItems.WATER_ITEM.name())) {
+                player.useItem(GameItems.WATER_ITEM.name());
+                System.out.println("Použil jsi WATER_ITEM k zhasnutí ohně.");
+                gameBoard.getBoard()[newX][newY] = 0; // Odebrání ohně
 
+            } else if (object == GameObjects.GHOST && hasItem(CraftingItems.SWORD.name())) {
+                player.useItem(CraftingItems.SWORD.name());
+                System.out.println("Použil jsi SWORD k boji s duchem.");
+                gameBoard.getBoard()[newX][newY] = 0;
+
+            } else {
+                player.collideWithObstacle(object);
+            }
+            gameBoard.getBoard()[newX][newY] = 0; // Odebrání surovin
+        }
+        player.setPlayerX(newX); // Nastavení nové X-ové souřadnice hráče
+        player.setPlayerY(newY); // Nastavení nové Y-ové souřadnice hráče
+        gameBoard.placePlayer(player); // Umístění hráče na novou pozici
     }
 
-
-    // Metoda pro pohyb hráče doleva
-    public void moveLeft() {
-        int currentX = player.getPlayerX();
-        int currentY = player.getPlayerY();
-
-        if (checkPlayerHealth()) {
-            return;
-        }
-
-        if (currentY <= 0) {
-            return; // Hráč se nachází na levým okraji herního pole, nemůže se pohnout doleva
-        }
-
-        int objectCode = gameBoard.getBoard()[currentX][currentY - 1];
-
-        if (objectCode == GameObjects.WALL.getCode()) {
-            return; // Nečinnost, hráč nemůže projít zdí
-        }
-
-        GameObjects object = GameObjects.getByCode(objectCode);
-        if (object != null && object.isDamage()) {
-            player.collideWithObstacle(object);
-        } else {
-            GameItems item = GameItems.getByCode(objectCode);
-            if (item != null) {
-                player.collideWithItem(item);
-                gameBoard.getBoard()[currentX][currentY - 1] = 0; // Odebrání surovin
-            }
-            // Přesun hráče na novou pozici
-            gameBoard.getBoard()[currentX][currentY] = 0; // Odebrání hráče z aktuální pozice
-            player.setPlayerY(currentY - 1); // Nastavení nové Y-ové souřadnice hráče
-            gameBoard.placePlayer(player); // Umístění hráče na novou pozici
-        }
-
-    }
-
-    // Metoda pro pohyb hráče doprava
-    public void moveRight() {
-        int currentX = player.getPlayerX();
-        int currentY = player.getPlayerY();
-
-        if (checkPlayerHealth()) {
-            return;
-        }
-
-        if (currentY > gameBoard.getBoard().length - 1) {
-            return; // Hráč se nachází na pravým okraji herního pole, nemůže se pohnout doprava
-        }
-
-        int objectCode = gameBoard.getBoard()[currentX][currentY + 1];
-
-        if (objectCode == GameObjects.WALL.getCode()) {
-            return; // Nečinnost, hráč nemůže projít zdí
-        }
-
-        GameObjects object = GameObjects.getByCode(objectCode);
-        if (object != null && object.isDamage()) {
-            player.collideWithObstacle(object);
-        } else {
-            GameItems item = GameItems.getByCode(objectCode);
-            if (item != null) {
-                player.collideWithItem(item);
-                gameBoard.getBoard()[currentX][currentY + 1] = 0; // Odebrání surovin
-            }
-            // Přesun hráče na novou pozici
-            gameBoard.getBoard()[currentX][currentY] = 0; // Odebrání hráče z aktuální pozice
-            player.setPlayerY(currentY + 1); // Nastavení nové Y-ové souřadnice hráče
-            gameBoard.placePlayer(player); // Umístění hráče na novou pozici
-        }
-
-    }
-
-    private boolean checkPlayerHealth() {
+    // Metoda pro zjištění, zda hráč má dostatek životů na další pohyb
+    public boolean checkPlayerHealth() {
         if (player.getHealth() <= 0) {
             System.out.println("Hráč nemá dostatek životů. Konec hry");
             return true;
         }
         return false;
     }
+
+    // Metoda pro zjištění, zda hrá může přejít na další level.
+    public boolean handleNextLevel() {
+        if (hasItem(GameItems.KEY.name())) {
+            System.out.println("Hráč má klíč v inventáři. Přechod na další level ...");
+            return true;
+        }
+        // Hráč nemá klíč v inventáři
+        System.out.println("Hráč nemá klíč v inventáři. Nelze přejít na další level.");
+        return false;
+    }
+
+    // Metoda pro zjištění zda daný předmět je v inventáři
+    public boolean hasItem(String itemName) {
+        Inventory inventory = player.getInventory();
+        for (Item item : inventory.getItems()) {
+            if (item.getName().equals(itemName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 
 }

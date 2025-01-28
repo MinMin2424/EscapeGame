@@ -1,7 +1,5 @@
 package cz.cvut.fel.pjv;
 
-import cz.cvut.fel.pjv.craftingItems.Potion;
-import cz.cvut.fel.pjv.craftingItems.Sword;
 import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
 
@@ -10,6 +8,7 @@ public class ItemFactory {
 
     // Metoda pro vytvoření předmětu na základě zadaného typu
     public static Item createItem(CraftingItems craftingItems, Inventory inventory) {
+
         // Získání seznamu potřebných surovin pro vytvoření předmětu
         int[] requiredItems = craftingItems.getRequiredItems();
 
@@ -40,14 +39,11 @@ public class ItemFactory {
             }
 
             // Vytvoření nového předmětu
-            switch (craftingItems) {
-                case SWORD:
-                    return new Sword(CraftingItems.SWORD.name(), 1);
-                case POTION:
-                    return new Potion(CraftingItems.POTION.name(), 1);
-                default:
-                    return null;
-            }
+            return switch (craftingItems) {
+                case SWORD -> new Item(CraftingItems.SWORD.name(), 1);
+                case POTION -> new Item(CraftingItems.POTION.name(), 1);
+                default -> null;
+            };
         } else {
             return null;
         }

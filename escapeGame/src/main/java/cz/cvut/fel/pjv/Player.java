@@ -6,12 +6,13 @@ import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
 
 public class Player {
     private int health; // Počet životů hráče
+    private final int MAX_HEALTH = 5;
     private int playerX;
     private int playerY;
     private Inventory inventory; // Inventáře hráče
 
     public Player(int playerX, int playerY) {
-        this.health = 5; // Počáteční počet životů
+        this.health = MAX_HEALTH; // Počáteční počet životů
         this.playerX = playerX;
         this.playerY = playerY;
         this.inventory = new Inventory(); // Inicializace inventáře
@@ -20,6 +21,10 @@ public class Player {
     // Metoda pro získání počtu životů
     public int getHealth() {
         return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
     }
 
     public int getPlayerX() {
@@ -40,6 +45,19 @@ public class Player {
 
     public Inventory getInventory() {
         return inventory;
+    }
+
+    //Metoda pro zvýšení životů
+    public void increaseHealth() {
+        for (Item item: inventory.getItems()) {
+            if (item.getName().equals(CraftingItems.POTION.name()) && getHealth() < MAX_HEALTH) {
+                inventory.removeItem(item);
+                setHealth(getHealth() + 1);
+                System.out.println("Použil jsi POTION a získal jsi 1 život!");
+                return;
+            }
+        }
+        System.out.println("Nemáš žádný POTION nebo máš plné životy!");
     }
 
     // Metoda pro ztrátu životů
@@ -66,9 +84,14 @@ public class Player {
     }
 
     // Metoda pro použití předmětu
-    public void useItem(Item item) {
-        inventory.removeItem(item);
-        System.out.println("Předmět " + item.getName() + " byl použit.");
+    public void useItem(String itemName) {
+        for (Item item: inventory.getItems()) {
+            if (item.getName().equals(itemName)) {
+                inventory.removeItem(item);
+                System.out.println("Předmět " + item.getName() + " byl použit.");
+                break;
+            }
+        }
     }
 
     // Metoda pro vytvoření nového předmětu a přidání jej do inventáře
@@ -78,7 +101,7 @@ public class Player {
             inventory.addItem(newItem);
             System.out.println("Vytvořen nový předmět: " + newItem.getName());
         } else {
-            System.out.println("Neznámý typ předmětu.");
+            System.out.println("Neznámý typ předmětu nebo není dostatek surovin k tvorbě předmětu.");
         }
     }
 

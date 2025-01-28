@@ -34,6 +34,7 @@ public class GameBoard {
         }
     }
 
+    // Metoda pro umístění postavu na herní pole
     public void placePlayer(Player player) {
         int x = player.getPlayerX();
         int y = player.getPlayerY();
@@ -66,17 +67,17 @@ public class GameBoard {
                     if (board[i][j] == GameObjects.WALL.getCode()) {
                         System.out.print("X  "); // Zeď
                     } else if (board[i][j] == GameObjects.GHOST.getCode()) {
-                        System.out.print("D  "); // Duch
+                        System.out.print("G  "); // Duch
                     } else if (board[i][j] == GameObjects.FIRE.getCode()) {
-                        System.out.print("O  "); // Oheň
+                        System.out.print("F  "); // Oheň
                     } else if (board[i][j] == GameObjects.WATER.getCode()) {
-                        System.out.print("V  "); // Voda
+                        System.out.print("W  "); // Voda
                     } else if (board[i][j] == GameItems.HERB.getCode()) {
-                        System.out.print("B  "); // Bylinka
+                        System.out.print("H  "); // Bylinka
                     } else if (board[i][j] == GameItems.ORE.getCode()) {
-                        System.out.print("K  "); // Kovová ruda
+                        System.out.print("O  "); // Kovová ruda
                     } else if (board[i][j] == GameItems.WATER_ITEM.getCode()) {
-                        System.out.print("VS "); // Voda - surovina
+                        System.out.print("WI "); // Voda - surovina
                     } else if (board[i][j] == GameItems.KEY.getCode()) {
                         System.out.print("KE "); // Klíč
                     } else if (board[i][j] == GameNextLevel.NEXT_LEVEL.getCode()) {

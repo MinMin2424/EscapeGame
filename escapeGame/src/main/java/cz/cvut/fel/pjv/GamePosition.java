@@ -60,34 +60,13 @@ public class GamePosition {
 
         gameBoard.placeNextLevel(GameNextLevel.NEXT_LEVEL, 9, 9);
 
-        playerController.moveRight();
-        playerController.moveRight();
-        playerController.moveUp();
-        playerController.moveUp();
-        playerController.moveUp();
-        playerController.moveUp();
-        playerController.moveLeft();
-        playerController.moveLeft();
-        playerController.moveRight();
-        playerController.moveUp();
-        playerController.moveRight();
-        playerController.moveRight();
-        playerController.moveRight();
-        playerController.moveRight();
-        playerController.moveRight();
-        playerController.moveRight();
-        playerController.moveDown();
-
-
+        System.out.println(" ");
+        System.out.println("LEVEL 1: ");
+        System.out.println("HEALTH: " + player.getHealth());
+        System.out.println("INVENTORY: ");
+        System.out.println(player.getInventory());
         gameBoard.drawBoard();
 
-        System.out.println(player.getInventory());
-        System.out.println(player.getHealth());
-        player.craftItem(CraftingItems.SWORD);
-        System.out.println(player.getInventory());
-        System.out.println(" ");
-        player.craftItem(CraftingItems.POTION);
-        System.out.println(player.getInventory());
 
 
     }

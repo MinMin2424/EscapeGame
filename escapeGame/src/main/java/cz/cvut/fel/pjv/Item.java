@@ -14,10 +14,12 @@ public class Item {
         return name;
     }
 
+    // Metoda pro zjištění množství předmětu
     public int getQuantity() {
         return quantity;
     }
 
+    // Metoda pro nastavení množství předmětu
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
