@@ -3,6 +3,8 @@ package cz.cvut.fel.pjv;
 import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
 
+import java.util.Objects;
+
 
 public class ItemFactory {
 
@@ -18,6 +20,7 @@ public class ItemFactory {
             GameItems requiredItem = GameItems.getByCode(itemCode);
             boolean found = false;
             for (Item inventoryItem : inventory.getItems()) {
+                assert requiredItem != null;
                 if (inventoryItem.getName().equals(requiredItem.name())) {
                     found = true;
                     break;
@@ -33,7 +36,7 @@ public class ItemFactory {
         if (hasRequiredItems) {
             // Odebrání surovin z inventáře
             for (int itemCode: requiredItems) {
-                String itemName = GameItems.getByCode(itemCode).name();
+                String itemName = Objects.requireNonNull(GameItems.getByCode(itemCode)).name();
                 Item requiredItem = new Item(itemName, 1);
                 inventory.removeItem(requiredItem);
             }
@@ -42,7 +45,6 @@ public class ItemFactory {
             return switch (craftingItems) {
                 case SWORD -> new Item(CraftingItems.SWORD.name(), 1);
                 case POTION -> new Item(CraftingItems.POTION.name(), 1);
-                default -> null;
             };
         } else {
             return null;

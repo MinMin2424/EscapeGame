@@ -5,11 +5,12 @@ import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
 import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
 
 public class Player {
+
     private int health; // Počet životů hráče
     private final int MAX_HEALTH = 5;
     private int playerX;
     private int playerY;
-    private Inventory inventory; // Inventáře hráče
+    private final Inventory inventory; // Inventáře hráče
 
     public Player(int playerX, int playerY) {
         this.health = MAX_HEALTH; // Počáteční počet životů

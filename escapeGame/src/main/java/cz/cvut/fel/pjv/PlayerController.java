@@ -6,7 +6,6 @@ import cz.cvut.fel.pjv.gameObjects_Items.GameNextLevel;
 import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
 import cz.cvut.fel.pjv.direction.Direction;
 
-
 public class PlayerController {
 
     private final Player player;
@@ -19,6 +18,7 @@ public class PlayerController {
 
     //Metoda pro pohyb hráče
     public void move(Direction direction) {
+
         // Aktuální pozice hráče
         int currentX = player.getPlayerX();
         int currentY = player.getPlayerY();
@@ -73,6 +73,7 @@ public class PlayerController {
 
         GameObjects object = GameObjects.getByCode(objectCode);
         if (object != null && object.isDamage()) {
+
             if (object == GameObjects.FIRE && hasItem(GameItems.WATER_ITEM.name())) {
                 player.useItem(GameItems.WATER_ITEM.name());
                 System.out.println("Použil jsi WATER_ITEM k zhasnutí ohně.");
@@ -86,15 +87,21 @@ public class PlayerController {
             } else {
                 player.collideWithObstacle(object);
             }
-            gameBoard.getBoard()[newX][newY] = 0; // Odebrání surovin
+
+        } else {
+            GameItems item = GameItems.getByCode(objectCode);
+            if (item != null) {
+                player.collideWithItem(item);
+                gameBoard.getBoard()[newX][newY] = 0; // Odebrání surovin
+            }
+
+            // Přesun hráče na novou pozici
+            movePlayer(currentX, currentY, newX, newY);
         }
-        player.setPlayerX(newX); // Nastavení nové X-ové souřadnice hráče
-        player.setPlayerY(newY); // Nastavení nové Y-ové souřadnice hráče
-        gameBoard.placePlayer(player); // Umístění hráče na novou pozici
     }
 
     // Metoda pro zjištění, zda hráč má dostatek životů na další pohyb
-    public boolean checkPlayerHealth() {
+    private boolean checkPlayerHealth() {
         if (player.getHealth() <= 0) {
             System.out.println("Hráč nemá dostatek životů. Konec hry");
             return true;
@@ -103,7 +110,7 @@ public class PlayerController {
     }
 
     // Metoda pro zjištění, zda hrá může přejít na další level.
-    public boolean handleNextLevel() {
+    private boolean handleNextLevel () {
         if (hasItem(GameItems.KEY.name())) {
             System.out.println("Hráč má klíč v inventáři. Přechod na další level ...");
             return true;
@@ -114,7 +121,7 @@ public class PlayerController {
     }
 
     // Metoda pro zjištění zda daný předmět je v inventáři
-    public boolean hasItem(String itemName) {
+    private boolean hasItem (String itemName){
         Inventory inventory = player.getInventory();
         for (Item item : inventory.getItems()) {
             if (item.getName().equals(itemName)) {
@@ -124,7 +131,11 @@ public class PlayerController {
         return false;
     }
 
-
-
+    // Metoda pro přesun hráče na novou pozici
+    private void movePlayer ( int currentX, int currentY, int newX, int newY){
+        gameBoard.getBoard()[currentX][currentY] = 0; // Odebrání hráče z aktuální pozice
+        player.setPlayerX(newX); // Nastavení nové X-ové souřadnice hráče
+        player.setPlayerY(newY); // Nastavení nové Y-ové souřadnice hráče
+        gameBoard.placePlayer(player); // Umístění hráče na novou pozici
+    }
 }
-

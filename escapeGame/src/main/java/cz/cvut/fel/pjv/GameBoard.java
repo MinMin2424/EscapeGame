@@ -7,6 +7,7 @@ import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
 public class GameBoard {
     private final int[][] board; // Herní pole
     private final int NUMBER_OF_SQUARES = 10;
+    private final int TILE_DIM = 64; // in pixels
 
     public GameBoard() {
         this.board = new int[NUMBER_OF_SQUARES][NUMBER_OF_SQUARES]; // Inicializace herního pole
@@ -15,6 +16,14 @@ public class GameBoard {
 
     public int[][] getBoard() {
         return board;
+    }
+
+    public int getSize() {
+        return NUMBER_OF_SQUARES * TILE_DIM;
+    }
+
+    public int getTileDim() {
+        return TILE_DIM;
     }
 
     // Metoda pro inicializaci herního pole
