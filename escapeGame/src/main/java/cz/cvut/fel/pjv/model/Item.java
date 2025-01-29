@@ -1,4 +1,4 @@
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.model;
 
 public class Item {
     private final String name;
@@ -23,5 +23,5 @@ public class Item {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-}
 
+}

@@ -1,10 +1,11 @@
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.model;
 
-import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
-import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
-import cz.cvut.fel.pjv.gameObjects_Items.GameNextLevel;
-import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
-import cz.cvut.fel.pjv.direction.Direction;
+import cz.cvut.fel.pjv.view.GamePosition2;
+import cz.cvut.fel.pjv.model.direction.Direction;
+import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameNextLevel;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
 
 public class PlayerController {
 
@@ -110,7 +111,7 @@ public class PlayerController {
     }
 
     // Metoda pro zjištění, zda hrá může přejít na další level.
-    private boolean handleNextLevel () {
+    private boolean handleNextLevel() {
         if (hasItem(GameItems.KEY.name())) {
             System.out.println("Hráč má klíč v inventáři. Přechod na další level ...");
             return true;
@@ -121,7 +122,7 @@ public class PlayerController {
     }
 
     // Metoda pro zjištění zda daný předmět je v inventáři
-    private boolean hasItem (String itemName){
+    private boolean hasItem(String itemName) {
         Inventory inventory = player.getInventory();
         for (Item item : inventory.getItems()) {
             if (item.getName().equals(itemName)) {
@@ -132,7 +133,7 @@ public class PlayerController {
     }
 
     // Metoda pro přesun hráče na novou pozici
-    private void movePlayer ( int currentX, int currentY, int newX, int newY){
+    private void movePlayer(int currentX, int currentY, int newX, int newY) {
         gameBoard.getBoard()[currentX][currentY] = 0; // Odebrání hráče z aktuální pozice
         player.setPlayerX(newX); // Nastavení nové X-ové souřadnice hráče
         player.setPlayerY(newY); // Nastavení nové Y-ové souřadnice hráče

@@ -1,11 +1,10 @@
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.model;
 
-import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
-import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
-import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
 
 public class Player {
-
     private int health; // Počet životů hráče
     private final int MAX_HEALTH = 5;
     private int playerX;
@@ -79,7 +78,7 @@ public class Player {
 
 
     // Metoda pro sbírání předmětů
-    public void collectItem(String item) {
+    private void collectItem(String item) {
         inventory.addItem(new Item(item, 1));
         System.out.println("Předmět " + item + " byl přidán do inventáře.");
     }
@@ -105,6 +104,5 @@ public class Player {
             System.out.println("Neznámý typ předmětu nebo není dostatek surovin k tvorbě předmětu.");
         }
     }
-
 
 }

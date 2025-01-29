@@ -1,10 +1,9 @@
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.model;
 
-import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
-import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
 
 import java.util.Objects;
-
 
 public class ItemFactory {
 
@@ -50,5 +49,4 @@ public class ItemFactory {
             return null;
         }
     }
-
 }

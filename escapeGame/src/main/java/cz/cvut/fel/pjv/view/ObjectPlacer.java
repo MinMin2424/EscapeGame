@@ -1,27 +1,39 @@
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.view;
 
-import cz.cvut.fel.pjv.direction.Direction;
-import cz.cvut.fel.pjv.gameObjects_Items.CraftingItems;
-import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
-import cz.cvut.fel.pjv.gameObjects_Items.GameNextLevel;
-import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
+import cz.cvut.fel.pjv.model.GameBoard;
+import cz.cvut.fel.pjv.model.Player;
+import cz.cvut.fel.pjv.model.PlayerController;
+import cz.cvut.fel.pjv.model.direction.Direction;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameNextLevel;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.HERB;
-import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.ORE;
-import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.WATER_ITEM;
-import static cz.cvut.fel.pjv.gameObjects_Items.GameItems.KEY;
-import static cz.cvut.fel.pjv.gameObjects_Items.GameObjects.WALL;
-import static cz.cvut.fel.pjv.gameObjects_Items.GameObjects.GHOST;
-import static cz.cvut.fel.pjv.gameObjects_Items.GameObjects.FIRE;
-import static cz.cvut.fel.pjv.gameObjects_Items.GameObjects.WATER;
+import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.HERB;
+import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.ORE;
+import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.WATER_ITEM;
+import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.KEY;
+import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.WALL;
+import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.GHOST;
+import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.WATER;
 
-public class GamePosition {
+public class ObjectPlacer {
 
-    GameBoard gameBoard = new GameBoard();
-    Player player = new Player(9, 0);
-    PlayerController playerController = new PlayerController(player, gameBoard);
+    private final GameBoard gameBoard;
+    protected final Player player;
+    private final PlayerController playerController;
+
+    public ObjectPlacer(GameBoard gameBoard) {
+        this.gameBoard = gameBoard;
+        this.player = new Player(9, 0);
+        this.playerController = new PlayerController(player, gameBoard);
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
 
     public void startGame() {
 
@@ -49,7 +61,7 @@ public class GamePosition {
 
         gameBoard.placeObject(WALL, 7, 0); gameBoard.placeObject(WALL, 7, 1); gameBoard.placeObject(WALL, 7, 3);
 
-        gameBoard.placeObject(WALL, 8, 3); gameBoard.placeObject(GHOST, 8, 5); gameBoard.placeObject(GHOST, 5, 6);
+        gameBoard.placeObject(WALL, 8, 3); gameBoard.placeObject(GHOST, 8, 5); gameBoard.placeObject(GHOST, 8, 6);
         gameBoard.placeObject(GHOST, 8, 7); gameBoard.placeObject(GHOST, 8, 8); gameBoard.placeObject(GHOST, 8, 9);
 
         gameBoard.placeObject(WALL, 9, 3); gameBoard.placeObject(WALL, 9, 4); gameBoard.placeObject(WALL, 9, 5);
@@ -64,60 +76,19 @@ public class GamePosition {
 
         System.out.println(" ");
         System.out.println("LEVEL 1: ");
-        System.out.println("HEALTH: " + player.getHealth());
-        System.out.println("INVENTORY: ");
-        System.out.println(player.getInventory());
 
-        playerController.move(Direction.RIGHT);
-        playerController.move(Direction.RIGHT);
+
         playerController.move(Direction.UP);
+        playerController.move(Direction.RIGHT);
+        playerController.move(Direction.RIGHT);
         playerController.move(Direction.UP);
         playerController.move(Direction.UP);
         playerController.move(Direction.LEFT);
+        playerController.move(Direction.LEFT);
         playerController.move(Direction.UP);
-        playerController.move(Direction.UP);
-        playerController.move(Direction.RIGHT);
 
+        System.out.println("INVENTORY: ");
+        System.out.println(player.getInventory());
         System.out.println("HEALTH: " + player.getHealth());
-
-        gameBoard.drawBoard();
-
     }
-
-    public void renderObjects(GraphicsContext graphicsContext, int tileDim) {
-
-        int[][] board = gameBoard.getBoard();
-
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-
-                if (board[i][j] != 0) {
-
-                    int objectCode = board[i][j];
-                    Image image = null;
-
-                    GameObjects gameObjects = GameObjects.getByCode(objectCode);
-                    if (gameObjects != null) {
-                        image = new Image(gameObjects.getImageName());
-
-                    } else {
-
-                        GameItems gameItems = GameItems.getByCode(objectCode);
-                        if (gameItems != null) {
-                            image = new Image(gameItems.getImageName());
-
-                        } else if (objectCode == 1) {
-                            image = new Image("character.png");
-                        }
-                    }
-
-                    if (image != null) {
-                        graphicsContext.drawImage(image, j * tileDim, i * tileDim, tileDim, tileDim);
-                    }
-                }
-            }
-        }
-    }
-
 }
-

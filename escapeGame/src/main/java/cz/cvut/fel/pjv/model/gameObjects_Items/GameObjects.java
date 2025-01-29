@@ -1,12 +1,10 @@
-package cz.cvut.fel.pjv.gameObjects_Items;
+package cz.cvut.fel.pjv.model.gameObjects_Items;
 
 public enum GameObjects {
-
     WALL(2, true, false, "wall.png"),
     GHOST(3, true, true, "ghost.png"),
     FIRE(4, true, true, "fire.png"),
     WATER(5, true, true, "water_obstacle.png");
-
     private final int code;
     private final boolean isObstacle;
     private final boolean isDamage;
@@ -44,4 +42,3 @@ public enum GameObjects {
         return null;
     }
 }
-

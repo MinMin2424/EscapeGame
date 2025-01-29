@@ -1,8 +1,9 @@
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.model;
 
-import cz.cvut.fel.pjv.gameObjects_Items.GameNextLevel;
-import cz.cvut.fel.pjv.gameObjects_Items.GameItems;
-import cz.cvut.fel.pjv.gameObjects_Items.GameObjects;
+
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameNextLevel;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
 
 public class GameBoard {
     private final int[][] board; // Herní pole

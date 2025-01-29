@@ -1,4 +1,4 @@
-package cz.cvut.fel.pjv.gameObjects_Items;
+package cz.cvut.fel.pjv.model.gameObjects_Items;
 
 public enum GameItems {
 
@@ -32,4 +32,3 @@ public enum GameItems {
         return null;
     }
 }
-

@@ -1,7 +1,10 @@
-package cz.cvut.fel.pjv;
+package cz.cvut.fel.pjv.model;
+
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Inventory {
 
@@ -46,6 +49,17 @@ public class Inventory {
         return items;
     }
 
+    // Metoda pro získání názvu obrázku předmětu podle kódu
+    public String getImageName(Item item) {
+        String itemName = item.getName();
+        for (GameItems gameItems: GameItems.values()) {
+            if (gameItems.name().equals(itemName)) {
+                return gameItems.getImageName();
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -54,5 +68,6 @@ public class Inventory {
         }
         return sb.toString();
     }
-}
 
+
+}
