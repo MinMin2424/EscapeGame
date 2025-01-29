@@ -1,6 +1,9 @@
 package cz.cvut.fel.pjv;
 
 import cz.cvut.fel.pjv.model.GameBoard;
+import cz.cvut.fel.pjv.model.Player;
+import cz.cvut.fel.pjv.model.PlayerController;
+import cz.cvut.fel.pjv.model.direction.Direction;
 import cz.cvut.fel.pjv.view.*;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -16,9 +19,10 @@ public class Start extends Application {
 
     private final GameBoard gameBoard = new GameBoard();
     private final ObjectPlacer objectPlacer = new ObjectPlacer(gameBoard);
+    private final PlayerController playerController = new PlayerController(objectPlacer.getPlayer(), gameBoard);
     private final ObjectRender objectRender = new ObjectRender(gameBoard);
     private final RenderBackground renderBackground = new RenderBackground(gameBoard);
-    private final RenderHealthForPlayer renderHealthForPlayer = new RenderHealthForPlayer(objectPlacer);
+    private final RenderHealthForPlayer renderHealthForPlayer = new RenderHealthForPlayer(objectPlacer.getPlayer());
     private final RenderInventory renderInventory = new RenderInventory(gameBoard);
 
     @Override
@@ -35,13 +39,7 @@ public class Start extends Application {
         pane.getChildren().addAll(gameCanvas, heartCanvas);
 
         Scene scene = new Scene(pane, gameBoard.getSize() + 100 , gameBoard.getSize() + 100);
-
-        scene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.I) {
-                // Zobrazení inventář
-                renderInventory.displayInventory(objectPlacer.getPlayer().getInventory());
-            }
-        });
+        setupKeyboardEvents(scene, graphicsContext, heartGraphicsContext);
 
         stage.setTitle("GAME!");
         stage.setScene(scene);
@@ -53,6 +51,33 @@ public class Start extends Application {
         objectPlacer.startGame();
         renderHealthForPlayer.render(heartGraphicsContext);
         objectRender.renderObject(graphicsContext, gameBoard.getTileDim());
+    }
+
+    private void setupKeyboardEvents(Scene scene, GraphicsContext graphicsContext, GraphicsContext heartGraphicsContext) {
+
+        scene.setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case W:
+                    playerController.move(Direction.UP);
+                    break;
+                case A:
+                    playerController.move(Direction.LEFT);
+                    break;
+                case S:
+                    playerController.move(Direction.DOWN);
+                    break;
+                case D:
+                    playerController.move(Direction.RIGHT);
+                    break;
+                case I:
+                    renderInventory.displayInventory(objectPlacer.getPlayer().getInventory());
+                    break;
+            }
+            renderBackground.render(graphicsContext);
+            objectRender.renderObject(graphicsContext, gameBoard.getTileDim());
+            renderHealthForPlayer.render(heartGraphicsContext);
+        });
+
     }
 
     public static void main(String[] arg) {

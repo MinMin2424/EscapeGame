@@ -27,6 +27,23 @@ public class ItemFactory {
 
         int[] requiredItems = craftingItems.getRequiredItems();
 
+        if (hasRequiredItems(requiredItems, inventory)) {
+            for (int itemCode: requiredItems) {
+                String itemName = Objects.requireNonNull(GameItems.getByCode(itemCode)).name();
+                Item requiredItem = new Item(itemName, 1);
+                inventory.removeItem(requiredItem);
+            }
+
+            return switch (craftingItems) {
+                case SWORD -> new Item(CraftingItems.SWORD.name(), 1);
+                case POTION -> new Item(CraftingItems.POTION.name(), 1);
+            };
+        } else {
+            return null;
+        }
+    }
+
+    private static boolean hasRequiredItems(int[] requiredItems, Inventory inventory) {
         boolean hasRequiredItems = true;
         for (int itemCode: requiredItems) {
             GameItems requiredItem = GameItems.getByCode(itemCode);
@@ -43,20 +60,7 @@ public class ItemFactory {
                 break;
             }
         }
-
-        if (hasRequiredItems) {
-            for (int itemCode: requiredItems) {
-                String itemName = Objects.requireNonNull(GameItems.getByCode(itemCode)).name();
-                Item requiredItem = new Item(itemName, 1);
-                inventory.removeItem(requiredItem);
-            }
-
-            return switch (craftingItems) {
-                case SWORD -> new Item(CraftingItems.SWORD.name(), 1);
-                case POTION -> new Item(CraftingItems.POTION.name(), 1);
-            };
-        } else {
-            return null;
-        }
+        return hasRequiredItems;
     }
+
 }

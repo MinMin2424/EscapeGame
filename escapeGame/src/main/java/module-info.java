@@ -2,9 +2,6 @@ module cz.cvut.fel.pjv {
     requires javafx.controls;
     requires javafx.fxml;
 
-//    opens cz.cvut.fel.pjv to javafx.fxml;
-//    exports cz.cvut.fel.pjv;
-
     opens cz.cvut.fel.pjv.model.gameObjects_Items to javafx.fxml;
     exports cz.cvut.fel.pjv.model.gameObjects_Items;
 
@@ -16,6 +13,7 @@ module cz.cvut.fel.pjv {
 
     exports cz.cvut.fel.pjv.view;
     opens cz.cvut.fel.pjv.view to javafx.fxml;
+
     exports cz.cvut.fel.pjv;
     opens cz.cvut.fel.pjv to javafx.fxml;
 }

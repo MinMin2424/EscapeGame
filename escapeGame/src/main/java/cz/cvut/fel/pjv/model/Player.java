@@ -117,6 +117,7 @@ public class Player {
     public void collideWithObstacle(GameObjects obstacleType) {
         loseHealth(1);
         System.out.println("Dotek s " + obstacleType + " způsobil ztrátu životů.");
+        System.out.println(getHealth());
     }
 
     /**

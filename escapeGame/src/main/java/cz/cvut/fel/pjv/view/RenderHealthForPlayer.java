@@ -1,26 +1,26 @@
 package cz.cvut.fel.pjv.view;
 
-import cz.cvut.fel.pjv.model.GameBoard;
+import cz.cvut.fel.pjv.model.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 public class RenderHealthForPlayer {
 
-    private final ObjectPlacer objectPlacer;
+    private final Player player;
+    private final Image heartImage;
+    private final int imageSize = 32;
+    private final int padding = 10;
 
-    public RenderHealthForPlayer(ObjectPlacer objectPlacer) {
-        this.objectPlacer = objectPlacer;
+    public RenderHealthForPlayer(Player player) {
+        this.player = player;
+        this.heartImage = new Image("heart.png");
     }
 
     public void render(GraphicsContext graphicsContext) {
-        Image image = new Image("heart.png");
-        int playerHealth = objectPlacer.player.getHealth();
-        int imageSize = 32;
-        int padding = 10;
-
+        int playerHealth = player.getHealth();
         for (int i = 0; i < playerHealth; i++) {
             int x = i * (imageSize + padding);
-            graphicsContext.drawImage(image, x, 15, imageSize, imageSize);
+            graphicsContext.drawImage(heartImage, x, 15, imageSize, imageSize);
         }
     }
 }

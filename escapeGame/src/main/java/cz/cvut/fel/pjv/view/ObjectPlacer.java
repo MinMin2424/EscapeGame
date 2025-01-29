@@ -3,12 +3,7 @@ package cz.cvut.fel.pjv.view;
 import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.Player;
 import cz.cvut.fel.pjv.model.PlayerController;
-import cz.cvut.fel.pjv.model.direction.Direction;
-import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameNextLevel;
-import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.image.Image;
 
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.HERB;
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.ORE;
@@ -22,10 +17,12 @@ public class ObjectPlacer {
 
     private final GameBoard gameBoard;
     protected final Player player;
-    private final PlayerController playerController;
+    protected final PlayerController playerController;
+    private final GhostMovement ghostMovement;
 
     public ObjectPlacer(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
+        this.ghostMovement = new GhostMovement(gameBoard);
         this.player = new Player(9, 0);
         this.playerController = new PlayerController(player, gameBoard);
     }
@@ -49,9 +46,10 @@ public class ObjectPlacer {
         gameBoard.placeObject(WALL, 3, 5); gameBoard.placeObject(WALL, 3, 6); gameBoard.placeObject(WALL, 3, 7);
         gameBoard.placeObject(WALL, 3, 8);
 
-        gameBoard.placeObject(WALL, 4, 0); gameBoard.placeObject(GHOST, 4, 2); gameBoard.placeObject(GHOST, 4, 3);
-        gameBoard.placeObject(GHOST, 4, 4); gameBoard.placeObject(GHOST, 4, 5); gameBoard.placeObject(GHOST, 4, 6);
-        gameBoard.placeObject(GHOST, 4, 7);
+        gameBoard.placeObject(WALL, 4, 0);
+//        gameBoard.placeObject(GHOST, 4, 2); gameBoard.placeObject(GHOST, 4, 3);
+//        gameBoard.placeObject(GHOST, 4, 4); gameBoard.placeObject(GHOST, 4, 5); gameBoard.placeObject(GHOST, 4, 6);
+//        gameBoard.placeObject(GHOST, 4, 7);
 
         gameBoard.placeObject(WALL, 5, 2); gameBoard.placeObject(WALL, 5, 3); gameBoard.placeObject(WALL, 5, 4);
         gameBoard.placeObject(WALL, 5, 6); gameBoard.placeObject(WALL, 5, 7); gameBoard.placeObject(WALL, 5, 8);
@@ -61,8 +59,9 @@ public class ObjectPlacer {
 
         gameBoard.placeObject(WALL, 7, 0); gameBoard.placeObject(WALL, 7, 1); gameBoard.placeObject(WALL, 7, 3);
 
-        gameBoard.placeObject(WALL, 8, 3); gameBoard.placeObject(GHOST, 8, 5); gameBoard.placeObject(GHOST, 8, 6);
-        gameBoard.placeObject(GHOST, 8, 7); gameBoard.placeObject(GHOST, 8, 8); gameBoard.placeObject(GHOST, 8, 9);
+        gameBoard.placeObject(WALL, 8, 3);
+//        gameBoard.placeObject(GHOST, 8, 5); gameBoard.placeObject(GHOST, 8, 6);
+//        gameBoard.placeObject(GHOST, 8, 7); gameBoard.placeObject(GHOST, 8, 8); gameBoard.placeObject(GHOST, 8, 9);
 
         gameBoard.placeObject(WALL, 9, 3); gameBoard.placeObject(WALL, 9, 4); gameBoard.placeObject(WALL, 9, 5);
         gameBoard.placeObject(WALL, 9, 6); gameBoard.placeObject(WALL, 9, 7); gameBoard.placeObject(WALL, 9, 8);
@@ -74,18 +73,12 @@ public class ObjectPlacer {
 
         gameBoard.placeNextLevel(GameNextLevel.NEXT_LEVEL, 9, 9);
 
+        gameBoard.placeObject(GHOST, 4, 2);
+        ghostMovement.startMovement();
+
         System.out.println(" ");
         System.out.println("LEVEL 1: ");
 
-
-        playerController.move(Direction.UP);
-        playerController.move(Direction.RIGHT);
-        playerController.move(Direction.RIGHT);
-        playerController.move(Direction.UP);
-        playerController.move(Direction.UP);
-        playerController.move(Direction.LEFT);
-        playerController.move(Direction.LEFT);
-        playerController.move(Direction.UP);
 
         System.out.println("INVENTORY: ");
         System.out.println(player.getInventory());
