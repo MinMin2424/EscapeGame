@@ -38,7 +38,7 @@ public class Start extends Application {
 
         scene.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.I) {
-                // Po stisknutí klávesy "I" zobrazte inventář
+                // Zobrazení inventář
                 renderInventory.displayInventory(objectPlacer.getPlayer().getInventory());
             }
         });
