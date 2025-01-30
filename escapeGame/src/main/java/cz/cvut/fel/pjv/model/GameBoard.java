@@ -12,7 +12,7 @@ import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
  * Represents the game board for a simple 2D game.
  */
 public class GameBoard {
-    private final int[][] board; // Game board
+    private int[][] board; // Game board
     private final int NUMBER_OF_SQUARES = 10; // Number of squares in each dimension
     private final int TILE_DIM = 64; // Tile dimension in pixels
 
@@ -31,6 +31,14 @@ public class GameBoard {
      */
     public int[][] getBoard() {
         return board;
+    }
+
+    /**
+     * Sets the game board to the specified array.
+     * @param board Thr array representing the game board to be set.
+     */
+    public void setBoard(int[][] board) {
+        this.board = board;
     }
 
     /**

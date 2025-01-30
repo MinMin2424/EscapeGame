@@ -9,10 +9,10 @@ package cz.cvut.fel.pjv.model.gameObjects_Items;
  */
 public enum GameItems {
 
-    HERB(6, "herb.png"),
-    ORE(7, "ore.png"),
-    WATER_ITEM(8, "water_item.png"),
-    KEY(9, "key.png");
+    HERB(6, "herb2.png"),
+    ORE(7, "ore2.png"),
+    WATER_ITEM(8, "water2.png"),
+    KEY(9, "key2.png");
 
     private final int code; // Code representing the game item
     private final String imageName; // Image name associated with the game item.

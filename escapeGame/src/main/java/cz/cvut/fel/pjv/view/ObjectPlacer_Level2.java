@@ -1,3 +1,7 @@
+/**
+ * @author tranomin@fel.cvut.cz
+ */
+
 package cz.cvut.fel.pjv.view;
 
 import cz.cvut.fel.pjv.model.GameBoard;

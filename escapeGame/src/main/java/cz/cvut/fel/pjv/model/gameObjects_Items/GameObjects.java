@@ -9,7 +9,7 @@ package cz.cvut.fel.pjv.model.gameObjects_Items;
  */
 public enum GameObjects {
     WALL(2, true, false, "wall.png"),
-    GHOST(3, true, true, "ghost.png"),
+    GHOST(3, true, true, "ghost2.png"),
     FIRE(4, true, true, "fire.png"),
     WATER(5, true, true, "water_obstacle.png");
     private final int code; // Code representing the game object

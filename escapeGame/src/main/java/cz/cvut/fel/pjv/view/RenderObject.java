@@ -7,10 +7,10 @@ import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public class ObjectRender {
+public class RenderObject {
     private final GameBoard gameBoard;
 
-    public ObjectRender(GameBoard gameBoard) {
+    public RenderObject(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
     }
 

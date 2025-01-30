@@ -10,7 +10,7 @@ package cz.cvut.fel.pjv.model.gameObjects_Items;
 public enum CraftingItems {
 
     SWORD(7,  new int[]{GameItems.ORE.getCode(), GameItems.ORE.getCode(), GameItems.ORE.getCode()}, "sword.png"),
-    POTION(8,  new int[]{GameItems.WATER_ITEM.getCode(), GameItems.HERB.getCode()}, "potion.png");
+    POTION(8,  new int[]{GameItems.WATER_ITEM.getCode(), GameItems.HERB.getCode()}, "potion2.png");
 
     private final int code; // Code representing the crafting item
     private final int[] requiredItems; // Array of required items for crafting

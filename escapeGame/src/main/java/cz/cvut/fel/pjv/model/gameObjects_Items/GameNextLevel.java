@@ -8,7 +8,7 @@ package cz.cvut.fel.pjv.model.gameObjects_Items;
  * Enumerates the game object representing the transition to the next level.
  */
 public enum GameNextLevel {
-    NEXT_LEVEL(10, "next_level.png");
+    NEXT_LEVEL(10, "star.png");
 
     private final int code; // Code representing the next level game object
     private final String imageName; // Image name associated with the next level game object

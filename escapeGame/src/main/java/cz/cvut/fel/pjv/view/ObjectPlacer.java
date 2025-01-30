@@ -1,3 +1,7 @@
+/**
+ * @author tranomin@fel.cvut.cz
+ */
+
 package cz.cvut.fel.pjv.view;
 
 import cz.cvut.fel.pjv.model.GameBoard;
@@ -13,23 +17,45 @@ import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.WALL;
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.GHOST;
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.WATER;
 
+/**
+ * Handles the placement of objects and items on the game board at the start of the game.
+ */
 public class ObjectPlacer {
 
-    private final GameBoard gameBoard;
-    protected final Player player;
-    protected final PlayerController playerController;
+    private final GameBoard gameBoard; // The game board where objects and items are placed
+    protected Player player; // The player object
+    protected final PlayerController playerController; // The controller for player movement
 
+    /**
+     * Constructs an ObjectPlacer object with the specified game board.
+     * Initializes the player object and player controller.
+     * @param gameBoard The game board where the objects and items will be placed.
+     */
     public ObjectPlacer(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
-        this.player = new Player(9, 0);
+        this.player = new Player(9, 0); // Initialize player at position (9,0)
         this.playerController = new PlayerController(player, gameBoard);
     }
 
+    /**
+     * Retrieves the player object.
+     * @return The player object.
+     */
     public Player getPlayer() {
         return this.player;
     }
 
+    /**
+     * Sets the player object to the specified player.
+     * @param player The player object to be set.
+     */
+    public void setPlayer (Player player) {
+        this.player = player;
+    }
 
+    /**
+     * Starts the game by placing objects, obstacles and items on the game board.
+     */
     public void startGame() {
 
         gameBoard.placePlayer(player);
@@ -44,11 +70,7 @@ public class ObjectPlacer {
         gameBoard.placeObject(WALL, 3, 5); gameBoard.placeObject(WALL, 3, 6); gameBoard.placeObject(WALL, 3, 7);
         gameBoard.placeObject(WALL, 3, 8);
 
-        gameBoard.placeObject(WALL, 4, 0);
-        gameBoard.placeObject(GHOST, 4, 2);
-//        gameBoard.placeObject(GHOST, 4, 3);
-//        gameBoard.placeObject(GHOST, 4, 4); gameBoard.placeObject(GHOST, 4, 5); gameBoard.placeObject(GHOST, 4, 6);
-//        gameBoard.placeObject(GHOST, 4, 7);
+        gameBoard.placeObject(WALL, 4, 0); gameBoard.placeObject(GHOST, 4, 2);
 
         gameBoard.placeObject(WALL, 5, 2); gameBoard.placeObject(WALL, 5, 3); gameBoard.placeObject(WALL, 5, 4);
         gameBoard.placeObject(WALL, 5, 6); gameBoard.placeObject(WALL, 5, 7); gameBoard.placeObject(WALL, 5, 8);
@@ -58,10 +80,7 @@ public class ObjectPlacer {
 
         gameBoard.placeObject(WALL, 7, 0); gameBoard.placeObject(WALL, 7, 1); gameBoard.placeObject(WALL, 7, 3);
 
-        gameBoard.placeObject(WALL, 8, 3);
-        gameBoard.placeObject(GHOST, 8, 5);
-//        gameBoard.placeObject(GHOST, 8, 6);
-//        gameBoard.placeObject(GHOST, 8, 7); gameBoard.placeObject(GHOST, 8, 8); gameBoard.placeObject(GHOST, 8, 9);
+        gameBoard.placeObject(WALL, 8, 3); gameBoard.placeObject(GHOST, 8, 5);
 
         gameBoard.placeObject(WALL, 9, 3); gameBoard.placeObject(WALL, 9, 4); gameBoard.placeObject(WALL, 9, 5);
         gameBoard.placeObject(WALL, 9, 6); gameBoard.placeObject(WALL, 9, 7); gameBoard.placeObject(WALL, 9, 8);
@@ -75,10 +94,6 @@ public class ObjectPlacer {
 
         System.out.println(" ");
         System.out.println("LEVEL 1: ");
-
-
-        System.out.println("INVENTORY: ");
-        System.out.println(player.getInventory());
         System.out.println("HEALTH: " + player.getHealth());
     }
 }
