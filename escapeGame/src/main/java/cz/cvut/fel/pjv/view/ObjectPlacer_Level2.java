@@ -4,7 +4,7 @@ import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.Player;
 import cz.cvut.fel.pjv.model.PlayerController;
 
-public class GamePosition2 {
+public class ObjectPlacer_Level2 {
 
     public void startGame() {
         GameBoard gameBoard = new GameBoard();

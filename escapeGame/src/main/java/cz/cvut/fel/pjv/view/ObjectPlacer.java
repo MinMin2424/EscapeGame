@@ -18,11 +18,9 @@ public class ObjectPlacer {
     private final GameBoard gameBoard;
     protected final Player player;
     protected final PlayerController playerController;
-    private final GhostMovement ghostMovement;
 
     public ObjectPlacer(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
-        this.ghostMovement = new GhostMovement(gameBoard);
         this.player = new Player(9, 0);
         this.playerController = new PlayerController(player, gameBoard);
     }
@@ -47,7 +45,8 @@ public class ObjectPlacer {
         gameBoard.placeObject(WALL, 3, 8);
 
         gameBoard.placeObject(WALL, 4, 0);
-//        gameBoard.placeObject(GHOST, 4, 2); gameBoard.placeObject(GHOST, 4, 3);
+        gameBoard.placeObject(GHOST, 4, 2);
+//        gameBoard.placeObject(GHOST, 4, 3);
 //        gameBoard.placeObject(GHOST, 4, 4); gameBoard.placeObject(GHOST, 4, 5); gameBoard.placeObject(GHOST, 4, 6);
 //        gameBoard.placeObject(GHOST, 4, 7);
 
@@ -60,7 +59,8 @@ public class ObjectPlacer {
         gameBoard.placeObject(WALL, 7, 0); gameBoard.placeObject(WALL, 7, 1); gameBoard.placeObject(WALL, 7, 3);
 
         gameBoard.placeObject(WALL, 8, 3);
-//        gameBoard.placeObject(GHOST, 8, 5); gameBoard.placeObject(GHOST, 8, 6);
+        gameBoard.placeObject(GHOST, 8, 5);
+//        gameBoard.placeObject(GHOST, 8, 6);
 //        gameBoard.placeObject(GHOST, 8, 7); gameBoard.placeObject(GHOST, 8, 8); gameBoard.placeObject(GHOST, 8, 9);
 
         gameBoard.placeObject(WALL, 9, 3); gameBoard.placeObject(WALL, 9, 4); gameBoard.placeObject(WALL, 9, 5);
@@ -72,9 +72,6 @@ public class ObjectPlacer {
         gameBoard.placeItem(KEY, 2, 9);
 
         gameBoard.placeNextLevel(GameNextLevel.NEXT_LEVEL, 9, 9);
-
-        gameBoard.placeObject(GHOST, 4, 2);
-        ghostMovement.startMovement();
 
         System.out.println(" ");
         System.out.println("LEVEL 1: ");

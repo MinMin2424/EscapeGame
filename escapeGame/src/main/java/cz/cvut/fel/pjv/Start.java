@@ -24,6 +24,7 @@ public class Start extends Application {
     private final RenderBackground renderBackground = new RenderBackground(gameBoard);
     private final RenderHealthForPlayer renderHealthForPlayer = new RenderHealthForPlayer(objectPlacer.getPlayer());
     private final RenderInventory renderInventory = new RenderInventory(gameBoard);
+    private GhostMovement ghostMovement, ghostMovement2;
 
     @Override
     public void start(Stage stage)  {
@@ -51,6 +52,13 @@ public class Start extends Application {
         objectPlacer.startGame();
         renderHealthForPlayer.render(heartGraphicsContext);
         objectRender.renderObject(graphicsContext, gameBoard.getTileDim());
+
+        ghostMovement = new GhostMovement(gameBoard, 4, 2, 7, graphicsContext, renderBackground, objectRender);
+        ghostMovement.startMovement();
+
+        ghostMovement2 = new GhostMovement(gameBoard, 8, 5, 9, graphicsContext, renderBackground, objectRender);
+        ghostMovement2.startMovement();
+
     }
 
     private void setupKeyboardEvents(Scene scene, GraphicsContext graphicsContext, GraphicsContext heartGraphicsContext) {

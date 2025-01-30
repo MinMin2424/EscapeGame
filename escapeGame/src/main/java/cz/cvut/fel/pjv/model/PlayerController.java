@@ -4,7 +4,7 @@
 
 package cz.cvut.fel.pjv.model;
 
-import cz.cvut.fel.pjv.view.GamePosition2;
+import cz.cvut.fel.pjv.view.ObjectPlacer_Level2;
 import cz.cvut.fel.pjv.model.direction.Direction;
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
@@ -82,7 +82,7 @@ public class PlayerController {
                 return;
             }
             // Transition to the next level ...
-            GamePosition2 gamePosition2 = new GamePosition2();
+            ObjectPlacer_Level2 gamePosition2 = new ObjectPlacer_Level2();
             gamePosition2.startGame();
             return;
         }

@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 
 public class RenderInventory {
 
-    private final GameBoard gameBoard;
     private final int ROWS = 4;
     private final int COLUMNS = 5;
     private final int SQUARE_WIDTH = 100;
@@ -23,7 +22,6 @@ public class RenderInventory {
     private final int PADDING = 10;
 
     public RenderInventory(GameBoard gameBoard) {
-        this.gameBoard = gameBoard;
     }
 
     public void render(GraphicsContext graphicsContext, Inventory inventory) {
