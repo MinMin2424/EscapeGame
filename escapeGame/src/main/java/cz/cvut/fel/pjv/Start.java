@@ -108,7 +108,13 @@ public class Start extends Application {
             }
             renderBackground.render(graphicsContext);
             renderObject.renderObject(graphicsContext, gameBoard.getTileDim());
+            heartGraphicsContext.clearRect(0, 0, gameBoard.getSize(), 50);
             renderHealthForPlayer.render(heartGraphicsContext);
+
+            if (objectPlacer.getPlayer().getHealth() == 0) {
+                RenderGameOver.displayGameOver();
+            }
+
         });
 
     }

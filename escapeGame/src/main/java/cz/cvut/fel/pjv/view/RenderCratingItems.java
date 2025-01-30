@@ -31,6 +31,12 @@ public class RenderCratingItems {
      * @param renderInventory The RenderInventory object used to update and display player's inventory.
      */
     public void displayCraftingItems(ObjectPlacer objectPlacer, RenderInventory renderInventory) {
+
+        if (objectPlacer.getPlayer().getHealth() == 0) {
+            RenderGameOver.displayGameOver();
+            return;
+        }
+
         renderInventory.close();
 
         stage = new Stage();

@@ -122,6 +122,11 @@ public class RenderInventory {
      */
     public void displayInventory(ObjectPlacer objectPlacer) {
 
+        if (objectPlacer.getPlayer().getHealth() == 0) {
+            RenderGameOver.displayGameOver();
+            return;
+        }
+
         stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("INVENTORY");
