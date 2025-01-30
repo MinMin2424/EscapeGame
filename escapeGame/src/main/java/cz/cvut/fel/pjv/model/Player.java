@@ -156,14 +156,16 @@ public class Player {
      * Crafts a new item and adds it to the inventory.
      * @param craftingItems The type of the item to be crafted.
      */
-    public void craftItem(CraftingItems craftingItems) {
+    public boolean craftItem(CraftingItems craftingItems) {
         Item newItem = ItemFactory.createItem(craftingItems, inventory);
         if (newItem != null) {
             inventory.addItem(newItem);
             System.out.println("Vytvořen nový předmět: " + newItem.getName());
             System.out.println(inventory);
+            return true;
         } else {
             System.out.println("Neznámý typ předmětu nebo není dostatek surovin k tvorbě předmětu.");
+            return false;
         }
     }
 

@@ -22,8 +22,6 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.util.Objects;
-
 /**
  * Handles the rendering and display of the player's inventory.
  */
@@ -42,6 +40,50 @@ public class RenderInventory {
      * @param gameBoard The game board associated with the inventory.
      */
     public RenderInventory(GameBoard gameBoard) {
+    }
+
+    /**
+     *  Displays the player's inventory in a separate window.
+     * @param objectPlacer Provide a brief description of the role of the ObjectPlacer parameter.
+     */
+    public void displayInventory(ObjectPlacer objectPlacer) {
+
+        if (objectPlacer.getPlayer().getHealth() == 0) {
+            RenderMessage.displayGameOver();
+            return;
+        }
+
+        stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("INVENTORY");
+
+        int widthInventory = COLUMNS * (SQUARE_WIDTH + PADDING) + PADDING;
+        int heightInventory = ROWS * (SQUARE_HEIGHT + PADDING) + PADDING + 100;
+
+        Canvas canvas = new Canvas(widthInventory, heightInventory);
+        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
+        render(graphicsContext, objectPlacer.getPlayer().getInventory());
+
+        BorderPane layout = new BorderPane();
+        layout.setCenter(canvas);
+        VBox container = new VBox(layout);
+        container.setStyle("-fx-background-color: ghostwhite;");
+        container.setAlignment(Pos.CENTER);
+
+        Scene scene = new Scene(container);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, event ->  handleCraftingEvent(event, objectPlacer));
+        stage.setScene(scene);
+        stage.showAndWait();
+    }
+
+    /**
+     * Closes the stage displaying the inventory window
+     * Checks if the stage is not null, then closes it.
+     */
+    public void close() {
+        if (stage != null) {
+            stage.close();
+        }
     }
 
     /**
@@ -113,50 +155,6 @@ public class RenderInventory {
     public void handleCraftingEvent(KeyEvent event, ObjectPlacer objectPlacer) {
         if (event.getCode() == KeyCode.ADD || event.getCode() == KeyCode.PLUS) {
             renderCratingItems.displayCraftingItems(objectPlacer, this);
-        }
-    }
-
-    /**
-     *  Displays the player's inventory in a separate window.
-     * @param objectPlacer Provide a brief description of the role of the ObjectPlacer parameter.
-     */
-    public void displayInventory(ObjectPlacer objectPlacer) {
-
-        if (objectPlacer.getPlayer().getHealth() == 0) {
-            RenderGameOver.displayGameOver();
-            return;
-        }
-
-        stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("INVENTORY");
-
-        int widthInventory = COLUMNS * (SQUARE_WIDTH + PADDING) + PADDING;
-        int heightInventory = ROWS * (SQUARE_HEIGHT + PADDING) + PADDING + 100;
-
-        Canvas canvas = new Canvas(widthInventory, heightInventory);
-        GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        render(graphicsContext, objectPlacer.getPlayer().getInventory());
-
-        BorderPane layout = new BorderPane();
-        layout.setCenter(canvas);
-        VBox container = new VBox(layout);
-        container.setStyle("-fx-background-color: ghostwhite;");
-        container.setAlignment(Pos.CENTER);
-
-        Scene scene = new Scene(container);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, event ->  handleCraftingEvent(event, objectPlacer));
-        stage.setScene(scene);
-        stage.showAndWait();
-    }
-
-    /**
-     * Closes the stage displaying the inventory window
-     * Checks if the stage is not null, then closes it.
-     */
-    public void close() {
-        if (stage != null) {
-            stage.close();
         }
     }
 }

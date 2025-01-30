@@ -112,7 +112,7 @@ public class Start extends Application {
             renderHealthForPlayer.render(heartGraphicsContext);
 
             if (objectPlacer.getPlayer().getHealth() == 0) {
-                RenderGameOver.displayGameOver();
+                RenderMessage.displayGameOver();
             }
 
         });

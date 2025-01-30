@@ -1,9 +1,11 @@
+/**
+ * @author tranomin@fel.cvut.cz
+ */
+
 package cz.cvut.fel.pjv.view;
 
-import cz.cvut.fel.pjv.Start;
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,7 +18,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 /**
  * Handles the rendering and display of crafting items window.
@@ -33,7 +34,7 @@ public class RenderCratingItems {
     public void displayCraftingItems(ObjectPlacer objectPlacer, RenderInventory renderInventory) {
 
         if (objectPlacer.getPlayer().getHealth() == 0) {
-            RenderGameOver.displayGameOver();
+            RenderMessage.displayGameOver();
             return;
         }
 
@@ -94,15 +95,33 @@ public class RenderCratingItems {
      * @param renderInventory The RenderInventory object used to update and display player's inventory.
      */
     private void craftingItems(Scene scene, ObjectPlacer objectPlacer, RenderInventory renderInventory) {
+
         scene.setOnKeyPressed(event -> {
             switch ((event.getCode())) {
                 case S:
-                    objectPlacer.getPlayer().craftItem(CraftingItems.SWORD);
+                    if (objectPlacer.getPlayer().craftItem(CraftingItems.SWORD)) {
+                        RenderMessage.displayMessage_CraftingItem_True(CraftingItems.SWORD);
+                        this.close();
+                    } else {
+                        RenderMessage.displayMessage_CraftingItem_False(CraftingItems.SWORD);
+                        this.close();
+                    }
                     break;
                 case P:
-                    objectPlacer.getPlayer().craftItem(CraftingItems.POTION);
+                    if (objectPlacer.getPlayer().craftItem(CraftingItems.POTION)) {
+                        RenderMessage.displayMessage_CraftingItem_True(CraftingItems.POTION);
+                        this.close();
+                    } else {
+                        RenderMessage.displayMessage_CraftingItem_False(CraftingItems.POTION);
+                        this.close();
+                    }
+                    break;
+                default:
+                    RenderMessage.displayMessage_CraftingItem_None();
+                    this.close();
                     break;
             }
+
             renderInventory.displayInventory(objectPlacer);
             this.close();
         });
