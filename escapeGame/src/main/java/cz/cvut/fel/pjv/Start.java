@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.PlayerController;
 import cz.cvut.fel.pjv.model.direction.Direction;
+import cz.cvut.fel.pjv.save.GameData;
 import cz.cvut.fel.pjv.view.*;
 
 import javafx.application.Application;
@@ -23,12 +24,13 @@ public class Start extends Application {
 
     private final static   String SAVE_FILE_NAME = "saveGame.json";
     private final GameBoard gameBoard = new GameBoard();
-    private final ObjectPlacer objectPlacer = new ObjectPlacer(gameBoard);
+    public final ObjectPlacer objectPlacer = new ObjectPlacer(gameBoard);
     private final PlayerController playerController = new PlayerController(objectPlacer.getPlayer(), gameBoard);
     private final RenderObject renderObject = new RenderObject(gameBoard);
     private final RenderBackground renderBackground = new RenderBackground(gameBoard);
     private final RenderHealthForPlayer renderHealthForPlayer = new RenderHealthForPlayer(objectPlacer.getPlayer());
     private final RenderInventory renderInventory = new RenderInventory(gameBoard);
+    private final RenderCratingItems renderCratingItems = new RenderCratingItems();
     private GhostMovement ghostMovement, ghostMovement2;
 
     @Override
@@ -97,7 +99,11 @@ public class Start extends Application {
                     playerController.move(Direction.RIGHT);
                     break;
                 case I:
-                    renderInventory.displayInventory(objectPlacer.getPlayer().getInventory());
+                    renderInventory.displayInventory(objectPlacer);
+                    break;
+                case PLUS:
+                case ADD:
+                    renderCratingItems.displayCraftingItems(objectPlacer, renderInventory);
                     break;
             }
             renderBackground.render(graphicsContext);

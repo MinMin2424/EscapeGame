@@ -161,6 +161,7 @@ public class Player {
         if (newItem != null) {
             inventory.addItem(newItem);
             System.out.println("Vytvořen nový předmět: " + newItem.getName());
+            System.out.println(inventory);
         } else {
             System.out.println("Neznámý typ předmětu nebo není dostatek surovin k tvorbě předmětu.");
         }

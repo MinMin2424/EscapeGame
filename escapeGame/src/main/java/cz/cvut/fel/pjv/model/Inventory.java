@@ -4,6 +4,7 @@
 
 package cz.cvut.fel.pjv.model;
 
+import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
 
 import java.util.ArrayList;
@@ -80,6 +81,11 @@ public class Inventory {
         for (GameItems gameItems: GameItems.values()) {
             if (gameItems.name().equals(itemName)) {
                 return gameItems.getImageName();
+            }
+        }
+        for (CraftingItems craftingItem : CraftingItems.values()) {
+            if (craftingItem.name().equals(itemName)) {
+                return craftingItem.getImageName();
             }
         }
         return null;

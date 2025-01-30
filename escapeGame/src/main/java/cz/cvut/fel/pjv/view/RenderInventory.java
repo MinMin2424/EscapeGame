@@ -22,11 +22,14 @@ import javafx.scene.text.FontWeight;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 /**
  * Handles the rendering and display of the player's inventory.
  */
 public class RenderInventory {
 
+    private Stage stage;
     private final int ROWS = 3; // Number of rows in the inventory grid.
     private final int COLUMNS = 5; // Number of columns in the inventory grid.
     private final int SQUARE_WIDTH = 100; // Width of each inventory item square.
@@ -97,7 +100,7 @@ public class RenderInventory {
         String plusText = "Press + to create a new item";
         int textX = 150;
         int textY = 3 * (120 + 10) + 85;
-        graphicsContext.setFont(Font.font("Courier New", FontWeight.NORMAL, 16));
+        graphicsContext.setFont(Font.font("Courier New", FontWeight.BOLD, 16));
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.fillText(plusText, textX, textY);
     }
@@ -107,18 +110,19 @@ public class RenderInventory {
      * If the key pressed is the plus key, displays the crafting items window.
      * @param event The KeyEvent representing the key press event.
      */
-    public void handleCraftingEvent(KeyEvent event) {
+    public void handleCraftingEvent(KeyEvent event, ObjectPlacer objectPlacer) {
         if (event.getCode() == KeyCode.ADD || event.getCode() == KeyCode.PLUS) {
-            renderCratingItems.displayCraftingItems();
+            renderCratingItems.displayCraftingItems(objectPlacer, this);
         }
     }
 
     /**
      *  Displays the player's inventory in a separate window.
-     * @param inventory The player's inventory to be displayed.
+     * @param objectPlacer Provide a brief description of the role of the ObjectPlacer parameter.
      */
-    public void displayInventory(Inventory inventory) {
-        Stage stage = new Stage();
+    public void displayInventory(ObjectPlacer objectPlacer) {
+
+        stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("INVENTORY");
 
@@ -127,7 +131,7 @@ public class RenderInventory {
 
         Canvas canvas = new Canvas(widthInventory, heightInventory);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
-        render(graphicsContext, inventory);
+        render(graphicsContext, objectPlacer.getPlayer().getInventory());
 
         BorderPane layout = new BorderPane();
         layout.setCenter(canvas);
@@ -136,8 +140,18 @@ public class RenderInventory {
         container.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(container);
-        scene.addEventHandler(KeyEvent.KEY_PRESSED, this::handleCraftingEvent);
+        scene.addEventHandler(KeyEvent.KEY_PRESSED, event ->  handleCraftingEvent(event, objectPlacer));
         stage.setScene(scene);
         stage.showAndWait();
+    }
+
+    /**
+     * Closes the stage displaying the inventory window
+     * Checks if the stage is not null, then closes it.
+     */
+    public void close() {
+        if (stage != null) {
+            stage.close();
+        }
     }
 }
