@@ -1,3 +1,7 @@
+/**
+ * @author tranomin@fel.cvut.cz
+ */
+
 package cz.cvut.fel.pjv;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,17 +23,19 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PushbackReader;
 
 public class Start extends Application {
 
-    private final static   String SAVE_FILE_NAME = "saveGame.json";
+    private static final String SAVE_FILE_NAME = "saveGame.json";
     private final GameBoard gameBoard = new GameBoard();
-    public final ObjectPlacer objectPlacer = new ObjectPlacer(gameBoard);
-    private final PlayerController playerController = new PlayerController(objectPlacer.getPlayer(), gameBoard);
+    public ObjectPlacer objectPlacer = new ObjectPlacer(gameBoard);
+    public ObjectPlacer_Level2 objectPlacer_level2;
+    private PlayerController playerController = new PlayerController(objectPlacer.getPlayer(), gameBoard);
     private final RenderObject renderObject = new RenderObject(gameBoard);
     private final RenderBackground renderBackground = new RenderBackground(gameBoard);
-    private final RenderHealthForPlayer renderHealthForPlayer = new RenderHealthForPlayer(objectPlacer.getPlayer());
-    private final RenderInventory renderInventory = new RenderInventory(gameBoard);
+    private RenderHealthForPlayer renderHealthForPlayer = new RenderHealthForPlayer(objectPlacer.getPlayer());
+    private final RenderInventory renderInventory = new RenderInventory();
     private final RenderCratingItems renderCratingItems = new RenderCratingItems();
     private GhostMovement ghostMovement, ghostMovement2;
 
@@ -57,6 +63,8 @@ public class Start extends Application {
 
         renderBackground.render(graphicsContext);
         objectPlacer.startGame();
+
+        loadGameState(SAVE_FILE_NAME);
         renderHealthForPlayer.render(heartGraphicsContext);
         renderObject.renderObject(graphicsContext, gameBoard.getTileDim());
 
@@ -73,8 +81,6 @@ public class Start extends Application {
                 ghostMovement2.stopMovement();
             });
         }
-
-        loadGameState(SAVE_FILE_NAME);
 
     }
 
@@ -106,6 +112,12 @@ public class Start extends Application {
                     renderCratingItems.displayCraftingItems(objectPlacer, renderInventory);
                     break;
             }
+
+            // TODO
+            if (playerController.isTransition()) {
+                updateGameForNextLevel(graphicsContext, heartGraphicsContext);
+            }
+
             renderBackground.render(graphicsContext);
             renderObject.renderObject(graphicsContext, gameBoard.getTileDim());
             heartGraphicsContext.clearRect(0, 0, gameBoard.getSize(), 50);
@@ -119,17 +131,40 @@ public class Start extends Application {
 
     }
 
+    // TODO
+    private void updateGameForNextLevel(GraphicsContext graphicsContext, GraphicsContext heartGraphicsContext) {
+        objectPlacer_level2 = new ObjectPlacer_Level2(gameBoard);
+        playerController = new PlayerController(objectPlacer_level2.getPlayer(), gameBoard);
+        renderHealthForPlayer = new RenderHealthForPlayer(objectPlacer_level2.getPlayer());
+
+        graphicsContext.clearRect(0, 0, gameBoard.getSize(), gameBoard.getSize());
+        heartGraphicsContext.clearRect(0, 0, gameBoard.getSize(), 50);
+
+        renderBackground.render(graphicsContext);
+        renderObject.renderObject(graphicsContext, gameBoard.getTileDim());
+        renderHealthForPlayer.render(heartGraphicsContext);
+    }
+
+    // TODO
     public void saveGameState(String fileName) {
+
         ObjectMapper objectMapper = new ObjectMapper();
         GameData gameData = new GameData();
         gameData.gameBoard = gameBoard.getBoard();
-        gameData.player = objectPlacer.getPlayer();
+
+        if (!playerController.isTransition()) {
+            gameData.player = objectPlacer.getPlayer();
+        } else {
+            gameData.player = objectPlacer_level2.getPlayer();
+        }
+
         try {
-            objectMapper.writeValue(new File(fileName), gameData);
+            objectMapper.writeValue( new File (fileName), gameData);
             System.out.println("Status: Save game successful.");
         } catch (IOException e) {
             System.err.println("Cannot save game: " + e.getMessage());
         }
+
     }
 
     public void loadGameState(String fileName) {
@@ -137,7 +172,6 @@ public class Start extends Application {
         try {
             GameData gameData = objectMapper.readValue(new File(fileName), GameData.class);
             gameBoard.setBoard(gameData.gameBoard);
-            objectPlacer.setPlayer(gameData.player);
             System.out.println("Status: Load game successful.");
         } catch (IOException e) {
             System.err.println("Cannot load game: " + e.getMessage());

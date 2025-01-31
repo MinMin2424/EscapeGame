@@ -36,13 +36,6 @@ public class RenderInventory {
     private final RenderCratingItems renderCratingItems = new RenderCratingItems();
 
     /**
-     * Constructs a RenderInventory object.
-     * @param gameBoard The game board associated with the inventory.
-     */
-    public RenderInventory(GameBoard gameBoard) {
-    }
-
-    /**
      *  Displays the player's inventory in a separate window.
      * @param objectPlacer Provide a brief description of the role of the ObjectPlacer parameter.
      */
@@ -91,7 +84,7 @@ public class RenderInventory {
      * @param graphicsContext The graphics context to render on.
      * @param inventory The player's inventory to be rendered.
      */
-    public void render(GraphicsContext graphicsContext, Inventory inventory) {
+    private void render(GraphicsContext graphicsContext, Inventory inventory) {
 
         Image plusImage = new Image("plus.png");
         double plusX = (graphicsContext.getCanvas().getWidth() - plusImage.getWidth()) / 2;
@@ -154,7 +147,7 @@ public class RenderInventory {
      * If the key pressed is the plus key, displays the crafting items window.
      * @param event The KeyEvent representing the key press event.
      */
-    public void handleCraftingEvent(KeyEvent event, ObjectPlacer objectPlacer) {
+    private void handleCraftingEvent(KeyEvent event, ObjectPlacer objectPlacer) {
         if (event.getCode() == KeyCode.ADD || event.getCode() == KeyCode.PLUS) {
             renderCratingItems.displayCraftingItems(objectPlacer, this);
         }

@@ -4,7 +4,6 @@
 
 package cz.cvut.fel.pjv.model;
 
-import cz.cvut.fel.pjv.view.ObjectPlacer_Level2;
 import cz.cvut.fel.pjv.model.direction.Direction;
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
@@ -18,6 +17,7 @@ public class PlayerController {
 
     private final Player player; // The controlled player
     private final GameBoard gameBoard; // The game board
+    public boolean transition;
 
     /**
      * Constructors a new PlayerController with a specified player and game board.
@@ -27,6 +27,16 @@ public class PlayerController {
     public PlayerController(Player player, GameBoard gameBoard) {
         this.player = player;
         this.gameBoard = gameBoard;
+    }
+
+    // TODO
+    public boolean isTransition() {
+        return transition;
+    }
+
+    // TODO
+    public void setTransition(boolean transition) {
+        this.transition = transition;
     }
 
     /**
@@ -81,9 +91,11 @@ public class PlayerController {
             if (!handleNextLevel()) {
                 return;
             }
-            // Transition to the next level ...
-            ObjectPlacer_Level2 gamePosition2 = new ObjectPlacer_Level2();
-            gamePosition2.startGame();
+            //  TODO
+            setTransition(true);
+//             Transition to the next level ...
+//            ObjectPlacer_Level2 gamePosition2 = new ObjectPlacer_Level2(new GameBoard());
+//            gamePosition2.startGame();
             return;
         }
 
