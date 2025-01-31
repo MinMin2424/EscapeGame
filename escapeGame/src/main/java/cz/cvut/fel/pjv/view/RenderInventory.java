@@ -58,7 +58,7 @@ public class RenderInventory {
         stage.setTitle("INVENTORY");
 
         int widthInventory = COLUMNS * (SQUARE_WIDTH + PADDING) + PADDING;
-        int heightInventory = ROWS * (SQUARE_HEIGHT + PADDING) + PADDING + 100;
+        int heightInventory = ROWS * (SQUARE_HEIGHT + PADDING) + PADDING + 130;
 
         Canvas canvas = new Canvas(widthInventory, heightInventory);
         GraphicsContext graphicsContext = canvas.getGraphicsContext2D();
@@ -140,11 +140,13 @@ public class RenderInventory {
      */
     private void renderText(GraphicsContext graphicsContext) {
         String plusText = "Press + to create a new item";
+        String useText = "Press P to use potion to increase your health.";
         int textX = 150;
         int textY = 3 * (120 + 10) + 85;
         graphicsContext.setFont(Font.font("Courier New", FontWeight.BOLD, 16));
         graphicsContext.setFill(Color.BLACK);
         graphicsContext.fillText(plusText, textX, textY);
+        graphicsContext.fillText(useText, 55, textY + 30);
     }
 
     /**
@@ -155,6 +157,20 @@ public class RenderInventory {
     public void handleCraftingEvent(KeyEvent event, ObjectPlacer objectPlacer) {
         if (event.getCode() == KeyCode.ADD || event.getCode() == KeyCode.PLUS) {
             renderCratingItems.displayCraftingItems(objectPlacer, this);
+        }
+
+        switch (event.getCode()) {
+            case ADD:
+            case PLUS:
+                renderCratingItems.displayCraftingItems(objectPlacer, this);
+                break;
+            case P:
+                if (objectPlacer.getPlayer().increaseHealth()) {
+                    RenderMessage.usingPotion_True();
+                } else {
+                    RenderMessage.usingPotion_False();
+                }
+                break;
         }
     }
 }

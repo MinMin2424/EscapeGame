@@ -92,6 +92,30 @@ public class RenderMessage {
     }
 
     /**
+     * Displays a message indicating successful usage of the POTION item.
+     */
+    public static void usingPotion_True() {
+        String title = "USING POTION!";
+        String message = "You just used POTION and you have gained 1 life.";
+        String message2 = "POTION is removed from inventory.";
+        String imageName = CraftingItems.POTION.getImageName();
+
+        displayMessage(new MessageInfo(title, message, message2, imageName));
+    }
+
+    /**
+     * Displays a message indicating unsuccessful usage of the POTION item.
+     */
+    public static void usingPotion_False() {
+        String title = "USING POTION!";
+        String message = "Failed to use POTION.";
+        String message2 = "You have no POTION or you have full lives.";
+        String imageName = CraftingItems.POTION.getImageName();
+
+        displayMessage(new MessageInfo(title, message, message2, imageName));
+    }
+
+    /**
      * Displays a game over message.
      */
     public static void displayGameOver(){
@@ -102,4 +126,5 @@ public class RenderMessage {
 
         displayMessage(new MessageInfo(title, message, message2, imageName));
     }
+
 }

@@ -12,6 +12,15 @@ public class Item {
     private int quantity; // Quantity of the item
 
     /**
+     * Default constructor for the Item class.
+     * Initializes the item name to an empty string and quantity to 0.
+     */
+    public Item() {
+        this.name = "";
+        this.quantity = 0;
+    }
+
+    /**
      * Constructors a new Item object with a specified name and quantity.
      * @param name The name of the item.
      * @param quantity The quantity of the item.

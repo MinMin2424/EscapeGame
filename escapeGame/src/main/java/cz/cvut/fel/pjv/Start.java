@@ -74,7 +74,7 @@ public class Start extends Application {
             });
         }
 
-//        loadGameState(SAVE_FILE_NAME);
+        loadGameState(SAVE_FILE_NAME);
 
     }
 
@@ -126,24 +126,23 @@ public class Start extends Application {
         gameData.player = objectPlacer.getPlayer();
         try {
             objectMapper.writeValue(new File(fileName), gameData);
+            System.out.println("Status: Save game successful.");
         } catch (IOException e) {
             System.err.println("Cannot save game: " + e.getMessage());
         }
     }
 
-    // TODO LOAD GAME STATE
-//    public boolean loadGameState(String fileName) {
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        try {
-//            GameData gameData = objectMapper.readValue(new File(fileName), GameData.class);
-//            gameBoard.setBoard(gameData.gameBoard);
-//            objectPlacer.setPlayer(gameData.player);
-//            return true;
-//        } catch (IOException e) {
-//            System.err.println("Cannot load game: " + e.getMessage());
-//            return false;
-//        }
-//    }
+    public void loadGameState(String fileName) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            GameData gameData = objectMapper.readValue(new File(fileName), GameData.class);
+            gameBoard.setBoard(gameData.gameBoard);
+            objectPlacer.setPlayer(gameData.player);
+            System.out.println("Status: Load game successful.");
+        } catch (IOException e) {
+            System.err.println("Cannot load game: " + e.getMessage());
+        }
+    }
 
     public static void main(String[] arg) {
         launch();

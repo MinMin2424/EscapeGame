@@ -32,7 +32,6 @@ public class RenderCratingItems {
      * @param renderInventory The RenderInventory object used to update and display player's inventory.
      */
     public void displayCraftingItems(ObjectPlacer objectPlacer, RenderInventory renderInventory) {
-
         if (objectPlacer.getPlayer().getHealth() == 0) {
             RenderMessage.displayGameOver();
             return;
@@ -64,6 +63,7 @@ public class RenderCratingItems {
 
     }
 
+
     /**
      * Closes the crafting items window.
      */
@@ -71,21 +71,6 @@ public class RenderCratingItems {
         if (stage != null) {
             stage.close();
         }
-    }
-
-    /**
-     * Render the crafting items window.
-     * @param graphicsContext The GraphicsContext used to render items on the canvas.
-     * @param width The width of the canvas.
-     * @param height The height of the canvas.
-     */
-    private void render(GraphicsContext graphicsContext, int width, int height) {
-        renderBackground(graphicsContext, width, height);
-        renderTitle(graphicsContext, width);
-        renderItems(graphicsContext);
-        renderText(graphicsContext);
-        renderDetailTitle(graphicsContext);
-        renderDetail(graphicsContext);
     }
 
     /**
@@ -97,7 +82,7 @@ public class RenderCratingItems {
     private void craftingItems(Scene scene, ObjectPlacer objectPlacer, RenderInventory renderInventory) {
 
         scene.setOnKeyPressed(event -> {
-            switch ((event.getCode())) {
+            switch (event.getCode()) {
                 case S:
                     if (objectPlacer.getPlayer().craftItem(CraftingItems.SWORD)) {
                         RenderMessage.displayMessage_CraftingItem_True(CraftingItems.SWORD);
@@ -125,6 +110,21 @@ public class RenderCratingItems {
             renderInventory.displayInventory(objectPlacer);
             this.close();
         });
+    }
+
+    /**
+     * Render the crafting items window.
+     * @param graphicsContext The GraphicsContext used to render items on the canvas.
+     * @param width The width of the canvas.
+     * @param height The height of the canvas.
+     */
+    private void render(GraphicsContext graphicsContext, int width, int height) {
+        renderBackground(graphicsContext, width, height);
+        renderTitle(graphicsContext, width);
+        renderItems(graphicsContext);
+        renderText(graphicsContext);
+        renderDetailTitle(graphicsContext);
+        renderDetail(graphicsContext);
     }
 
     /**

@@ -19,6 +19,18 @@ public class Player {
     private final Inventory inventory; // Player's inventory
 
     /**
+     * Default constructor for the Player class.
+     * Initializes the player's health, position, and inventory with default values.
+     */
+    public Player() {
+        this.health = MAX_HEALTH; // Initial health points
+        this.playerX = 0; // Default X-coordinate
+        this.playerY = 0; // Default Y-coordinate
+        this.inventory = new Inventory(); // Initialize the inventory
+    }
+
+
+    /**
      * Constructor a new Player object with the specified coordinates.
      * Initializes the player's health, position, and inventory.
      * @param playerX The initial x-coordinate of the player.
@@ -90,16 +102,17 @@ public class Player {
     /**
      * Increase the player's health points by 1 if a POTION is found in the inventory.
      */
-    public void increaseHealth() {
+    public boolean increaseHealth() {
         for (Item item: inventory.getItems()) {
             if (item.getName().equals(CraftingItems.POTION.name()) && getHealth() < MAX_HEALTH) {
                 inventory.removeItem(item);
                 setHealth(getHealth() + 1);
                 System.out.println("Použil jsi POTION a získal jsi 1 život!");
-                return;
+                return true;
             }
         }
         System.out.println("Nemáš žádný POTION nebo máš plné životy!");
+        return false;
     }
 
     /**
@@ -168,5 +181,4 @@ public class Player {
             return false;
         }
     }
-
 }
