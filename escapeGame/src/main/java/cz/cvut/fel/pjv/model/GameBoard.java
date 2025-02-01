@@ -12,6 +12,8 @@ import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
  * Represents the game board for a simple 2D game.
  */
 public class GameBoard {
+
+    private static final System.Logger LOGGER = System.getLogger(GameBoard.class.getName());
     private int[][] board; // Game board
     private final int NUMBER_OF_SQUARES = 10; // Number of squares in each dimension
     private final int TILE_DIM = 64; // Tile dimension in pixels
@@ -23,6 +25,7 @@ public class GameBoard {
     public GameBoard() {
         this.board = new int[NUMBER_OF_SQUARES][NUMBER_OF_SQUARES]; // Initialize the game board
         initializeBoard();
+        LOGGER.log(System.Logger.Level.INFO, "Game board is created");
     }
 
     /**
@@ -78,11 +81,13 @@ public class GameBoard {
      */
     public void placeObject(GameObjects gameObjects, int x, int y) {
         if (gameObjects == null) {
+            loggerERROR("nullObject");
             throw new IllegalArgumentException("GameObjects cannot be null.");
         }
         if (x >= 0 && x < NUMBER_OF_SQUARES && y >= 0 && y < NUMBER_OF_SQUARES) {
             board[x][y] = gameObjects.getCode();
         } else {
+            loggerERROR("objectOutOfBounds");
             throw new IllegalArgumentException("Coordinates out of bounds.");
         }
     }
@@ -97,6 +102,7 @@ public class GameBoard {
         if (x >= 0 && x < NUMBER_OF_SQUARES && y >= 0 && y < NUMBER_OF_SQUARES) {
             board[x][y] = 1;
         } else {
+            loggerERROR("playerOutOfBounds");
             throw new IllegalArgumentException("Coordinates out of bounds.");
         }
     }
@@ -109,11 +115,13 @@ public class GameBoard {
      */
     public void placeItem(GameItems gameItems, int x, int y) {
         if (gameItems == null) {
+            loggerERROR("nullItem");
             throw new IllegalArgumentException("GameObjects cannot be null.");
         }
         if (x >= 0 && x < NUMBER_OF_SQUARES && y >= 0 && y < NUMBER_OF_SQUARES) {
             board[x][y] = gameItems.getCode();
         } else {
+            loggerERROR("itemOutForBounds");
             throw new IllegalArgumentException("Coordinates out of bounds.");
         }
     }
@@ -126,49 +134,32 @@ public class GameBoard {
      */
     public void placeNextLevel(GameNextLevel gameNextLevel, int x, int y) {
         if (gameNextLevel == null) {
+            loggerERROR("nullNextLevel");
             throw new IllegalArgumentException("GameObjects cannot be null.");
         }
         if (x >= 0 && x < NUMBER_OF_SQUARES && y >= 0 && y < NUMBER_OF_SQUARES) {
             board[x][y] = gameNextLevel.getCode();
         } else {
+            loggerERROR("nextLevelOutOfBounds");
             throw new IllegalArgumentException("Coordinates out of bounds.");
         }
     }
 
     /**
-     * Draws the game board, displaying the current state of the game.
-     * Walls, characters, items, and other elements are represented bz specific symbols.
+     * Logs error messages related to unexpected or erroneous situations.
+     * @param error A string representing the specific type of error to log.
      */
-    public void drawBoard() {
-        for (int i = 0; i < NUMBER_OF_SQUARES; i++) {
-            for (int j = 0; j < NUMBER_OF_SQUARES; j++) {
-                if (board[i][j] == 1) {
-                    System.out.print("P  ");
-                } else {
-                    if (board[i][j] == GameObjects.WALL.getCode()) {
-                        System.out.print("X  "); // WALL
-                    } else if (board[i][j] == GameObjects.GHOST.getCode()) {
-                        System.out.print("G  "); // GHOST
-                    } else if (board[i][j] == GameObjects.FIRE.getCode()) {
-                        System.out.print("F  "); // FIRE
-                    } else if (board[i][j] == GameObjects.WATER.getCode()) {
-                        System.out.print("W  "); // WATER
-                    } else if (board[i][j] == GameItems.HERB.getCode()) {
-                        System.out.print("H  "); // HERB
-                    } else if (board[i][j] == GameItems.ORE.getCode()) {
-                        System.out.print("O  "); // ORE
-                    } else if (board[i][j] == GameItems.WATER_ITEM.getCode()) {
-                        System.out.print("WI "); // WATER_ITEM
-                    } else if (board[i][j] == GameItems.KEY.getCode()) {
-                        System.out.print("KE "); // KEY
-                    } else if (board[i][j] == GameNextLevel.NEXT_LEVEL.getCode()) {
-                        System.out.println("NL "); // NEXT_LEVEL
-                    } else {
-                        System.out.print("-  "); // EMPTY SPACE
-                    }
-                }
-            }
-            System.out.println(); // New line after each row.
+    private void loggerERROR(String error) {
+        String message = "";
+        switch (error) {
+            case "nullObject" -> message += "Attempted to place a null object on the game board.";
+            case "objectOutOfBounds" -> message += "Attempted to place object out of bounds.";
+            case "playerOutOfBounds" -> message += "Attempted to place player out of bounds.";
+            case "nullItem" -> message += "Attempted to place a null item on the game board.";
+            case "itemOutForBounds" -> message += "Attempted to place item out of bounds.";
+            case "nullNextLevel" -> message += "Attempted to place a null next level on the game board.";
+            case "nextLevelOutOfBounds" -> message += "Attempted to place next level out of bounds.";
         }
+        LOGGER.log(System.Logger.Level.ERROR, message);
     }
 }

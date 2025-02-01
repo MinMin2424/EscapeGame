@@ -2,13 +2,15 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.view;
+package cz.cvut.fel.pjv.model;
 
 /**
  * Represents information about message.
  * This class holds data such as title, main message, secondary message, and the name of the image associated with the message.
  */
 public class MessageInfo {
+
+    private static final System.Logger LOGGER = System.getLogger(MessageInfo.class.getName());
     private final String title;
     private final String message, message2;
     private final String imageName;
@@ -25,6 +27,7 @@ public class MessageInfo {
         this.message = message;
         this.message2 = message2;
         this.imageName = imageName;
+        LOGGER.log(System.Logger.Level.INFO, "MessageInfo created: " + getTitle());
     }
 
     /**

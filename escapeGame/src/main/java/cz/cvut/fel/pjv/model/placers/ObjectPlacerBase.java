@@ -2,7 +2,7 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.view.placers;
+package cz.cvut.fel.pjv.model.placers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fel.pjv.model.GameBoard;
@@ -77,7 +77,7 @@ public abstract class ObjectPlacerBase {
         try {
             String LOAD_GAME_FILE = "saveGame.json";
             GameData gameData = objectMapper.readValue(new File(LOAD_GAME_FILE), GameData.class);
-            if (gameData.player != null) {
+            if (gameData.player != null && (gameData.level == getLevel() || gameData.level == 2)) {
                 this.player = gameData.player;
                 int loadPlayerX = gameData.player.getPlayerX();
                 int loadPlayerY = gameData.player.getPlayerY();
@@ -104,4 +104,5 @@ public abstract class ObjectPlacerBase {
      * Subclasses must implement this method to handle the placement of objects and items specific to their levels.
      */
     public abstract void startGame();
+    public abstract int getLevel();
 }

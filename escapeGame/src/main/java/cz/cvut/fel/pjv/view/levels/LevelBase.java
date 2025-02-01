@@ -9,7 +9,9 @@ import cz.cvut.fel.pjv.model.PlayerController;
 import cz.cvut.fel.pjv.model.direction.Direction;
 import cz.cvut.fel.pjv.gameData.GameStateManager;
 import cz.cvut.fel.pjv.view.GhostMovement;
-import cz.cvut.fel.pjv.view.placers.ObjectPlacerBase;
+import cz.cvut.fel.pjv.model.placers.ObjectPlacerBase;
+import cz.cvut.fel.pjv.model.placers.ObjectPlacer_Level1;
+import cz.cvut.fel.pjv.model.placers.ObjectPlacer_Level2;
 import cz.cvut.fel.pjv.view.renders.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,6 +20,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+import static cz.cvut.fel.pjv.model.gameObjects_Items.GhostPosition.GHOST1;
+import static cz.cvut.fel.pjv.model.gameObjects_Items.GhostPosition.GHOST2;
 
 /**
  * Represents the base class for all levels in the game.
@@ -76,7 +81,12 @@ public abstract class LevelBase {
         renderBackground.render(graphicsContext);
         objectPlacer.startGame();
 
-        GameStateManager.loadGameState(SAVE_FILE_NAME, gameBoard);
+        int savedLevel = GameStateManager.getSavedLevelFromFile(SAVE_FILE_NAME);
+        int currentLevel = getLevel(objectPlacer);
+        if (savedLevel == currentLevel || savedLevel == 2) {
+            GameStateManager.loadGameState(SAVE_FILE_NAME, gameBoard);
+        }
+
         renderHealthForPlayer.render(heartGraphicsContext);
         renderObject.renderObject(graphicsContext, gameBoard.getTileDim());
 
@@ -84,7 +94,8 @@ public abstract class LevelBase {
 
         if (scene.getWindow() != null) {
             scene.getWindow().setOnCloseRequest(event -> {
-                GameStateManager.saveGameState(SAVE_FILE_NAME, gameBoard, objectPlacer);
+                int level = getLevel(objectPlacer);
+                GameStateManager.saveGameState(SAVE_FILE_NAME, gameBoard, objectPlacer, level);
                 ghostMovement1.stopMovement();
                 ghostMovement2.stopMovement();
             });
@@ -114,9 +125,7 @@ public abstract class LevelBase {
 
             renderAgain(graphicsContext, heartGraphicsContext);
 
-            if (objectPlacer.getPlayer().getHealth() == 0) {
-                RenderMessage.displayGameOver();
-            }
+            if (objectPlacer.getPlayer().getHealth() == 0) RenderMessage.displayGameOver();
 
         });
 
@@ -144,13 +153,17 @@ public abstract class LevelBase {
             RenderMessage.usingSwordToSaveYourself();
             playerController.setSaved(false);
 
-        } else if (playerController.isTransition()) {
+        } else if (playerController.isTransition() && getLevel(objectPlacer) == 1) {
             RenderMessage.transitionToTheNextLevel();
             ghostMovement1.stopMovement();
             ghostMovement2.stopMovement();
             Level_2 level2 = new Level_2();
             level2.displayLevel(stage);
             playerController.setTransition(false);
+
+        } else if (playerController.transition && getLevel(objectPlacer) == 2) {
+            RenderMessage.displayVictory();
+            playerController.setVictory(true);
 
         } else if (playerController.isRemoveFire()) {
             RenderMessage.usingWaterToSaveYourself();
@@ -162,5 +175,25 @@ public abstract class LevelBase {
      * Sets up the ghost movements for the level.
      * @param graphicsContext The graphics context for rendering.
      */
-    protected abstract void setupGhostMovements(GraphicsContext graphicsContext);
+    private void setupGhostMovements(GraphicsContext graphicsContext) {
+        ghostMovement1 = new GhostMovement(gameBoard, GHOST1.getPositionX(), GHOST1.getPositionY(), GHOST1.getFinalPositionY(), graphicsContext, renderBackground, renderObject);
+        ghostMovement1.startMovement(GHOST1);
+
+        ghostMovement2 = new GhostMovement(gameBoard, GHOST2.getPositionX(), GHOST2.getPositionY(), GHOST2.getFinalPositionY(), graphicsContext, renderBackground, renderObject);
+        ghostMovement2.startMovement(GHOST2);
+    }
+
+    /**
+     * Gets the level based on the provided ObjectPlacerBase instance.
+     * If the ObjectPlacerBase instance is an instance of ObjectPlacer_Level2.
+     * the level is set to 2, otherwise it defaults to 1.
+     * @param objectPlacer The ObjectPlacerBase instance to determine the level from.
+     * @return The level of the ObjectPlacerBase instance (1 if ObjectPlacer_Level1, 2 if ObjectPlacer_Level2).
+     */
+    private static int getLevel(ObjectPlacerBase objectPlacer) {
+        int level = 1;
+
+        if (objectPlacer instanceof ObjectPlacer_Level2) level = 2;
+        return level;
+    }
 }

@@ -15,10 +15,11 @@ import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
  */
 public class PlayerController {
 
+    private final System.Logger LOGGER = System.getLogger(PlayerController.class.getName());
     private final Player player; // The controlled player
     private final GameBoard gameBoard; // The game board
     public boolean transition;
-    public boolean isSaved, removeFire;
+    public boolean isSaved, removeFire, isVictory;
 
     /**
      * Constructors a new PlayerController with a specified player and game board.
@@ -41,9 +42,9 @@ public class PlayerController {
         int currentY = player.getPlayerY();
 
         // Check if the player has enough health for the next move
-        if (checkPlayerHealth()) {
-            return;
-        }
+        if (checkPlayerHealth()) return;
+
+        if (isVictory) return;
 
         // New position of the player
         int newX = currentX;
@@ -55,20 +56,22 @@ public class PlayerController {
             case LEFT -> newY--;
             case RIGHT -> newY++;
             default -> {
-                System.out.println("Neznámý směr pohybu.");
+                loggerERROR("unknownDirection");
                 return;
             }
         }
 
         // Check if the new position is outside the game board
         if (newX < 0 || newX >= gameBoard.getBoard().length || newY < 0 || newY >= gameBoard.getBoard()[0].length) {
+            loggerERROR("outOfBoard");
             return;
         }
 
         int objectCode = gameBoard.getBoard()[newX][newY];
 
         if (objectCode == GameObjects.WALL.getCode()) {
-            return; // Player cannot pass through a wall
+            loggerINFO("collideWithWall");
+            return;
         }
 
         if (objectCode == GameNextLevel.NEXT_LEVEL.getCode()) {
@@ -95,9 +98,9 @@ public class PlayerController {
      * Checks if the player has enough health for the next move.
      * @return True if the player has zero or lower health points, otherwise false.
      */
-    private boolean checkPlayerHealth() {
+    protected boolean checkPlayerHealth() {
         if (player.getHealth() <= 0) {
-            System.out.println("Hráč nemá dostatek životů. Konec hry");
+            loggerINFO("checkHealth");
             return true;
         }
         return false;
@@ -107,13 +110,12 @@ public class PlayerController {
      * Checks if the player can proceed to the next level.
      * @return True if the player has the key in the inventory, otherwise false.
      */
-    private boolean handleNextLevel() {
+    protected boolean handleNextLevel() {
         if (hasItem(GameItems.KEY.name())) {
-            System.out.println("Hráč má klíč v inventáři. Přechod na další level ...");
+            loggerINFO("nextLevelTrue");
             return true;
         }
-        // Player does not have the key in the inventory
-        System.out.println("Hráč nemá klíč v inventáři. Nelze přejít na další level.");
+        loggerINFO("nextLevelFalse");
         return false;
     }
 
@@ -122,12 +124,10 @@ public class PlayerController {
      * @param itemName The name of the item to check.
      * @return True if the item is in the inventory, otherwise false.
      */
-    private boolean hasItem(String itemName) {
+    protected boolean hasItem(String itemName) {
         Inventory inventory = player.getInventory();
         for (Item item : inventory.getItems()) {
-            if (item.getName().equals(itemName)) {
-                return true;
-            }
+            if (item.getName().equals(itemName)) return true;
         }
         return false;
     }
@@ -139,7 +139,7 @@ public class PlayerController {
      * @param newX The new x-coordinate of the player.
      * @param newY The new y-coordinate of the player
      */
-    private void movePlayer(int currentX, int currentY, int newX, int newY) {
+    protected void movePlayer(int currentX, int currentY, int newX, int newY) {
         gameBoard.getBoard()[currentX][currentY] = 0; // Remove the player from the current position
         player.setPlayerX(newX); // Set the new X-coordinate of the player
         player.setPlayerY(newY); // Set the new Y-coordinate of the player
@@ -152,21 +152,21 @@ public class PlayerController {
      * @param x The x-coordinate of the collision.
      * @param y The y-coordinate of the collision.
      */
-    private void collideWithObjects(GameObjects object, int x, int y) {
+    protected void collideWithObjects(GameObjects object, int x, int y) {
         if (object == GameObjects.FIRE && hasItem(GameItems.WATER_ITEM.name())) {
             player.useItem(GameItems.WATER_ITEM.name());
             setRemoveFire(true);
-            System.out.println("Použil jsi WATER_ITEM k zhasnutí ohně.");
+            loggerINFO("collideWithFire");
             gameBoard.getBoard()[x][y] = 0; // Remove the fire
 
         } else if (object == GameObjects.GHOST && hasItem(CraftingItems.SWORD.name())) {
             player.useItem(CraftingItems.SWORD.name());
             setSaved(true);
-            System.out.println("Použil jsi SWORD k boji s duchem.");
+            loggerINFO("collideWithGhost");
             gameBoard.getBoard()[x][y] = 0;
 
         } else {
-            player.collideWithObstacle(object);
+            player.collideWithObstacle();
         }
     }
 
@@ -231,5 +231,49 @@ public class PlayerController {
         this.removeFire = removeFire;
     }
 
+    /**
+     * Checks if the game has been won.
+     * @return true if the game has been won, false otherwise.
+     */
+    public boolean isVictory() {
+        return isVictory;
+    }
 
+    /**
+     * Sets the status of the game victory.
+     * @param victory true if the game has been won, false otherwise.
+     */
+    public void setVictory(boolean victory) {
+        isVictory = victory;
+    }
+
+    /**
+     * Logs informational messages related to player actions and events.
+     * @param info A string representing the specific type of information to log.
+     */
+    private void loggerINFO(String info) {
+        String message = "";
+        switch (info) {
+            case "collideWithWall" -> message += "Player tried to move into a wall.";
+            case "nextLevelTrue" -> message += "Player has the key in the inventory. Proceeding to the next level...";
+            case "nextLevelFalse" -> message += "Player does not have the key in the inventory. Cannot proceed to the next level.";
+            case "checkHealth" -> message += "Player does not have enough health points. Game over.";
+            case "collideWithFire" -> message += "Player used WATER_ITEM to save themselves.";
+            case "collideWithGhost" -> message += "Player used SWORD to save themselves.";
+        }
+        LOGGER.log(System.Logger.Level.INFO, message);
+    }
+
+    /**
+     * Logs error messages related to unexpected or erroneous situations.
+     * @param error A string representing the specific type of error to log.
+     */
+    private void loggerERROR(String error) {
+        String message = "";
+        switch (error) {
+            case "unknownDirection" -> message += "Unknown movement direction.";
+            case "outOfBoard" -> message += "Player tried to move outside the game board.";
+        }
+        LOGGER.log(System.Logger.Level.ERROR, message);
+    }
 }

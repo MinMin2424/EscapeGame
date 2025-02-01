@@ -6,8 +6,7 @@ package cz.cvut.fel.pjv.view.renders;
 
 import cz.cvut.fel.pjv.model.Inventory;
 import cz.cvut.fel.pjv.model.Item;
-import cz.cvut.fel.pjv.view.placers.ObjectPlacerBase;
-import cz.cvut.fel.pjv.view.placers.ObjectPlacer_Level1;
+import cz.cvut.fel.pjv.model.placers.ObjectPlacerBase;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -44,6 +43,9 @@ public class RenderInventory {
 
         if (objectPlacer.getPlayer().getHealth() == 0) {
             RenderMessage.displayGameOver();
+            return;
+        } else if (objectPlacer.getPlayerController().isVictory()) {
+            RenderMessage.displayVictory();
             return;
         }
 

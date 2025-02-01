@@ -9,6 +9,9 @@ public class GameBoardTest {
 
     GameBoard gameBoard;
 
+    /**
+     * Initializes the test environment before each test case.
+     */
     @BeforeEach
     void initData() {
         gameBoard = new GameBoard();

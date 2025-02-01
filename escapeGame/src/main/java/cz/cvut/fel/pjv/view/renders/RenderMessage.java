@@ -6,7 +6,7 @@ package cz.cvut.fel.pjv.view.renders;
 
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
-import cz.cvut.fel.pjv.view.MessageInfo;
+import cz.cvut.fel.pjv.model.MessageInfo;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -98,7 +98,7 @@ public class RenderMessage {
      */
     public static void usingPotion_True() {
         String title = "USING POTION!";
-        String message = "You just used POTION and you have gained 1 life.";
+        String message = "You just used POTION to gain 1 life.";
         String message2 = "POTION is removed from inventory.";
         String imageName = CraftingItems.POTION.getImageName();
 
@@ -149,6 +149,18 @@ public class RenderMessage {
         String message = "You won the first level. Congratulations!";
         String message2 = "Transition to the second level...";
         String imageName = "level_up.png";
+
+        displayMessage(new MessageInfo(title, message, message2, imageName));
+    }
+
+    /**
+     * Displays a victory message.
+     */
+    public static void displayVictory(){
+        String title = "VICTORY!";
+        String message = "Congratulations!";
+        String message2 = " You have successfully completed the level <3";
+        String imageName = "victory.png";
 
         displayMessage(new MessageInfo(title, message, message2, imageName));
     }

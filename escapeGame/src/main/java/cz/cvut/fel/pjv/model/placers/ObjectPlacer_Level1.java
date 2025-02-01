@@ -2,7 +2,7 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.view.placers;
+package cz.cvut.fel.pjv.model.placers;
 
 import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.Player;
@@ -28,6 +28,11 @@ public class ObjectPlacer_Level1 extends ObjectPlacerBase {
      */
     public ObjectPlacer_Level1(GameBoard gameBoard) {
         super(gameBoard);
+    }
+
+    @Override
+    public int getLevel() {
+        return 1;
     }
 
     /**
@@ -78,9 +83,5 @@ public class ObjectPlacer_Level1 extends ObjectPlacerBase {
         gameBoard.placeItem(KEY, 2, 9);
 
         gameBoard.placeNextLevel(GameNextLevel.NEXT_LEVEL, 9, 9);
-
-        System.out.println(" ");
-        System.out.println("LEVEL 1: ");
-        System.out.println("HEALTH: " + player.getHealth());
     }
 }

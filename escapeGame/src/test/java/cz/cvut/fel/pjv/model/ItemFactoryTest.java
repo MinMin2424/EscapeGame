@@ -12,6 +12,9 @@ public class ItemFactoryTest {
 
     private Inventory inventory;
 
+    /**
+     * Initializes the test environment before each test case.
+     */
     @BeforeEach
     void initData() {
         inventory = new Inventory();

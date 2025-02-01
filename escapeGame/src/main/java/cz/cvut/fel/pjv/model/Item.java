@@ -8,6 +8,8 @@ package cz.cvut.fel.pjv.model;
  * Represents an item in the game.
  */
 public class Item {
+
+    private final System.Logger LOGGER = System.getLogger(Item.class.getName());
     private final String name; // Name of the item
     private int quantity; // Quantity of the item
 

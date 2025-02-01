@@ -16,6 +16,9 @@ public class InventoryTest {
     Inventory inventory;
     Item mockItem;
 
+    /**
+     * Initializes the test environment before each test case.
+     */
     @BeforeEach
     void initData() {
         inventory = new Inventory();

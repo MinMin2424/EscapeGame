@@ -6,8 +6,7 @@ package cz.cvut.fel.pjv.view.renders;
 
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
-import cz.cvut.fel.pjv.view.placers.ObjectPlacerBase;
-import cz.cvut.fel.pjv.view.placers.ObjectPlacer_Level1;
+import cz.cvut.fel.pjv.model.placers.ObjectPlacerBase;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -36,6 +35,9 @@ public class RenderCratingItems {
     public void displayCraftingItems(ObjectPlacerBase objectPlacer, RenderInventory renderInventory) {
         if (objectPlacer.getPlayer().getHealth() == 0) {
             RenderMessage.displayGameOver();
+            return;
+        } else if (objectPlacer.getPlayerController().isVictory()) {
+            RenderMessage.displayVictory();
             return;
         }
 

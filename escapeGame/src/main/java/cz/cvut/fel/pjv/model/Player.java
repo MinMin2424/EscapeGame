@@ -6,12 +6,13 @@ package cz.cvut.fel.pjv.model;
 
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
-import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
 
 /**
  * Represents the player character in the game.
  */
 public class Player {
+
+    private final System.Logger LOGGER = System.getLogger(Player.class.getName());
     private int health; // Player's health points
     private final int MAX_HEALTH = 5; // Maximum health points
     private int playerX;
@@ -27,6 +28,7 @@ public class Player {
         this.playerX = 0; // Default X-coordinate
         this.playerY = 0; // Default Y-coordinate
         this.inventory = new Inventory(); // Initialize the inventory
+        loggerINFO("playerCreated");
     }
 
 
@@ -41,6 +43,7 @@ public class Player {
         this.playerX = playerX;
         this.playerY = playerY;
         this.inventory = new Inventory(); // Initialize the inventory
+        loggerINFO("playerCreatedPosition");
     }
 
     /**
@@ -107,11 +110,11 @@ public class Player {
             if (item.getName().equals(CraftingItems.POTION.name()) && getHealth() < MAX_HEALTH) {
                 inventory.removeItem(item);
                 setHealth(getHealth() + 1);
-                System.out.println("Použil jsi POTION a získal jsi 1 život!");
+                loggerINFO("increaseHealth");
                 return true;
             }
         }
-        System.out.println("Nemáš žádný POTION nebo máš plné životy!");
+        loggerINFO("increaseHealthFalse");
         return false;
     }
 
@@ -121,16 +124,15 @@ public class Player {
      */
     public void loseHealth(int damage) {
         health -= damage;
+        loggerINFO("loseHealth");
     }
 
     /**
      * Decrease the player's health points by 1 when colliding with an obstacle.
-     * @param obstacleType The type of obstacle encountered.
      */
-    public void collideWithObstacle(GameObjects obstacleType) {
+    public void collideWithObstacle() {
         loseHealth(1);
-        System.out.println("Dotek s " + obstacleType + " způsobil ztrátu životů.");
-        System.out.println(getHealth());
+        loggerINFO("collideWithObstacle");
     }
 
     /**
@@ -139,6 +141,7 @@ public class Player {
      */
     public void collideWithItem(GameItems itemType) {
         collectItem(itemType.name());
+        loggerINFO("collideWithItem");
     }
 
 
@@ -148,7 +151,7 @@ public class Player {
      */
     private void collectItem(String item) {
         inventory.addItem(new Item(item, 1));
-        System.out.println("Předmět " + item + " byl přidán do inventáře.");
+        loggerINFO("collectedItem");
     }
 
     /**
@@ -159,7 +162,7 @@ public class Player {
         for (Item item: inventory.getItems()) {
             if (item.getName().equals(itemName)) {
                 inventory.removeItem(item);
-                System.out.println("Předmět " + item.getName() + " byl použit.");
+                loggerINFO("useItem");
                 break;
             }
         }
@@ -173,12 +176,30 @@ public class Player {
         Item newItem = ItemFactory.createItem(craftingItems, inventory);
         if (newItem != null) {
             inventory.addItem(newItem);
-            System.out.println("Vytvořen nový předmět: " + newItem.getName());
             System.out.println(inventory);
             return true;
         } else {
-            System.out.println("Neznámý typ předmětu nebo není dostatek surovin k tvorbě předmětu.");
             return false;
         }
+    }
+
+    /**
+     * Logs informational messages related to player actions and events.
+     * @param info A string representing the specific type of information to log.
+     */
+    private void loggerINFO(String info) {
+        String message = "";
+        switch (info) {
+            case "playerCreated" -> message += "Player created.";
+            case "playerCreatedPosition" -> message += "Player created at position (" + getPlayerX() + ", " + getPlayerY() + ").";
+            case "increaseHealth" -> message += "Used POTION and gained 1 health point.";
+            case "increaseHealthFalse" -> message += "No POTION available or health is already full.";
+            case "loseHealth" -> message += "Lost 1 health points.";
+            case "collideWithObstacle" -> message += "Collided with obstacle can lose health point.";
+            case "collideWithItem" -> message += "Collided with item.";
+            case "collectedItem" -> message += "Collected item.";
+            case "useItem" -> message += "Used item.";
+        }
+        LOGGER.log(System.Logger.Level.INFO, message);
     }
 }

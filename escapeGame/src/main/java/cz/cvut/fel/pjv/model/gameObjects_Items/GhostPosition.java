@@ -9,9 +9,7 @@ package cz.cvut.fel.pjv.model.gameObjects_Items;
  */
 public enum GhostPosition {
     GHOST1(4, 2, 7),
-    GHOST2(8, 5, 9),
-    GHOST3(0, 3, 7),
-    GHOST4(6, 1, 5);
+    GHOST2(8, 5, 9);
 
     private final int positionX; // Initial X position
     private final int positionY; // Initial Y position

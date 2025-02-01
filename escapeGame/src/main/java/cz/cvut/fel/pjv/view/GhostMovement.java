@@ -78,10 +78,6 @@ public class GhostMovement {
             if (currentY == finalY || currentY == 2 || currentY == 5) {
                 direction *= -1;
             }
-        } else if (ghost == GhostPosition.GHOST3 || ghost == GhostPosition.GHOST4) {
-            if (currentY == finalY || currentY == 1 || currentY == 3) {
-                direction *= -1;
-            }
         }
 
 

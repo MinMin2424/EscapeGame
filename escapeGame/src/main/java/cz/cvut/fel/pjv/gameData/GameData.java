@@ -12,5 +12,5 @@ import cz.cvut.fel.pjv.model.Player;
 public class GameData {
     public int[][] gameBoard; // Represents the game board
     public Player player; // Represents the player object containing player data
-
+    public int level; // Represents the level
 }

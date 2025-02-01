@@ -14,6 +14,8 @@ import java.util.*;
  */
 public class ItemFactory {
 
+    private static final System.Logger LOGGER = System.getLogger(ItemFactory.class.getName());
+
     /**
      * Creates an item based on the specified crafting item type and inventory.
      * First retrieve the list of required resources for crafting the item.
@@ -24,7 +26,10 @@ public class ItemFactory {
      * @return The created item, or null if creation failed.
      */
     public static Item createItem(CraftingItems craftingItems, Inventory inventory) {
-        if (inventory == null || craftingItems == null) return null;
+        if (inventory == null || craftingItems == null) {
+            loggerERROR();
+            return null;
+        }
 
         int[] requiredItems = craftingItems.getRequiredItems();
         String[] items_inventory = getItemName(inventory);
@@ -32,6 +37,7 @@ public class ItemFactory {
         List<String> itemList = new ArrayList<>(Arrays.asList(items_inventory));
 
         if (!hasRequiredItems(itemList, requiredItems)) {
+            loggerINFO("hasNotRequiredItems");
             return null;
         }
 
@@ -79,10 +85,9 @@ public class ItemFactory {
                 }
             }
 
-            if (!found) {
-                return false;
-            }
+            if (!found) return false;
         }
+        loggerINFO("hasRequiredItems");
         return true;
     }
 
@@ -97,6 +102,7 @@ public class ItemFactory {
             Item requiredItem = new Item(itemName, 1);
             inventory.removeItem(requiredItem);
         }
+        loggerINFO("itemsRemoved");
     }
 
     /**
@@ -105,10 +111,34 @@ public class ItemFactory {
      * @return The crafted item.
      */
     protected static Item createCraftedItem(CraftingItems craftingItems) {
+        loggerINFO("itemCreated");
         return switch (craftingItems) {
             case SWORD -> new Item(CraftingItems.SWORD.name(), 1);
             case POTION -> new Item(CraftingItems.POTION.name(), 1);
         };
+    }
+
+    /**
+     * Logs informational messages related to player actions and events.
+     * @param info A string representing the specific type of information to log.
+     */
+    private static void loggerINFO(String info) {
+        String message = "";
+        switch (info) {
+            case "hasRequiredItems" -> message += "All required items are present in the inventory.";
+            case "itemCreated" -> message += "Item successfully created.";
+            case "itemsRemoved" -> message += "All required items have been removed from inventory.";
+            case "hasNotRequiredItems" -> message += "Failed to create item. Required resources not available.";
+        }
+        LOGGER.log(System.Logger.Level.INFO, message);
+    }
+
+    /**
+     * Logs error messages related to unexpected or erroneous situations.
+     */
+    private static void loggerERROR() {
+        String message = "Invalid input parameters. Cannot create item.";
+        LOGGER.log(System.Logger.Level.ERROR, message);
     }
 
 }

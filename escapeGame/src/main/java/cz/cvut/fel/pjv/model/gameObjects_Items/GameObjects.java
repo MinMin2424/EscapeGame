@@ -48,14 +48,6 @@ public enum GameObjects {
     }
 
     /**
-     * Checks if the game object is an obstacle.
-     * @return True if the game object is an obstacle, otherwise false.
-     */
-    public boolean isObstacle() {
-        return isObstacle;
-    }
-
-    /**
      * Checks if the game object causes damage.
      * @return True if the game object causes damage, otherwise false.
      */
