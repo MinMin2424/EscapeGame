@@ -2,17 +2,12 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.view;
+package cz.cvut.fel.pjv.view.placers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.Player;
-import cz.cvut.fel.pjv.model.PlayerController;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameNextLevel;
-import cz.cvut.fel.pjv.save.GameData;
-
-import java.io.File;
-import java.io.IOException;
 
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.*;
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.*;
@@ -20,68 +15,31 @@ import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.*;
 /**
  * This class handles the placement of objects for level 2 of the game.
  * It initializes the gae board, places the player, objects, items, and defines the starting positions.
+ * Inherits from ObjectPlacerBase.
  */
-public class ObjectPlacer_Level2 {
-
-    private final GameBoard gameBoard; // The game board where objects and items are placed
-    private Player player; // The player object
-    protected final PlayerController playerController; // The controller for player movement
-    private final ObjectMapper objectMapper = new ObjectMapper();
+public class ObjectPlacer_Level2 extends ObjectPlacerBase {
 
     /**
-     * Constructs an ObjectPlacer_Level2 with the given game board.
-     * @param gameBoard The gameBoard for level 2.
+     * Constructs an ObjectPlacer_Level2 object with the specified game board.
+     * @param gameBoard The game board where the objects and items will be placed.
      */
     public ObjectPlacer_Level2(GameBoard gameBoard) {
-        this.gameBoard = gameBoard;
-        loadPlayerPositionFromFile();
-        this.playerController = new PlayerController(player, gameBoard);
+        super(gameBoard);
     }
 
     /**
-     * Retrieves the player object.
-     * @return The player object.
+     * Retrieves the default position for the player in Level 2.
+     * @return The default player object with the specified position.
      */
-    public Player getPlayer() {
-        return player;
-    }
-
-    /**
-     * Sets the player object.
-     * @param player The player object to set.
-     */
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
-
-    /**
-     * Loads the player position from a JSON file.
-     * If the file exists and contains player data, the player's position is loaded from the file.
-     * If the file does not exist or there is an error reading it, default player position (9,9) is set.
-     */
-    private void loadPlayerPositionFromFile() {
-
-        try {
-            String LOAD_GAME_FILE = "saveGame.json";
-            GameData gameData = objectMapper.readValue(new File(LOAD_GAME_FILE), GameData.class);
-            if (gameData.player != null) {
-                this.player = gameData.player;
-                int loadPlayerX = gameData.player.getPlayerX();
-                int loadPlayerY = gameData.player.getPlayerY();
-                player.setPlayerX(loadPlayerX);
-                player.setPlayerY(loadPlayerY);
-            } else {
-                this.player = new Player(9, 9);
-            }
-
-        } catch (IOException e) {
-            this.player = new Player(9, 9);
-        }
+    @Override
+    protected Player getDefaultPlayerPosition() {
+        return new Player(9, 9);
     }
 
     /**
      * Starts the game for level 2 by placing objects, items, and the player on the game board.
      */
+    @Override
     public void startGame() {
 
         gameBoard.placePlayer(player);

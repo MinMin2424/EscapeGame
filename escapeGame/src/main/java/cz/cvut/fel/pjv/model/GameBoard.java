@@ -77,8 +77,13 @@ public class GameBoard {
      * @param y The y-coordinate.
      */
     public void placeObject(GameObjects gameObjects, int x, int y) {
+        if (gameObjects == null) {
+            throw new IllegalArgumentException("GameObjects cannot be null.");
+        }
         if (x >= 0 && x < NUMBER_OF_SQUARES && y >= 0 && y < NUMBER_OF_SQUARES) {
             board[x][y] = gameObjects.getCode();
+        } else {
+            throw new IllegalArgumentException("Coordinates out of bounds.");
         }
     }
 
@@ -91,6 +96,8 @@ public class GameBoard {
         int y = player.getPlayerY();
         if (x >= 0 && x < NUMBER_OF_SQUARES && y >= 0 && y < NUMBER_OF_SQUARES) {
             board[x][y] = 1;
+        } else {
+            throw new IllegalArgumentException("Coordinates out of bounds.");
         }
     }
 
@@ -101,8 +108,13 @@ public class GameBoard {
      * @param y The y-coordinates.
      */
     public void placeItem(GameItems gameItems, int x, int y) {
+        if (gameItems == null) {
+            throw new IllegalArgumentException("GameObjects cannot be null.");
+        }
         if (x >= 0 && x < NUMBER_OF_SQUARES && y >= 0 && y < NUMBER_OF_SQUARES) {
             board[x][y] = gameItems.getCode();
+        } else {
+            throw new IllegalArgumentException("Coordinates out of bounds.");
         }
     }
 
@@ -113,8 +125,13 @@ public class GameBoard {
      * @param y The y-coordinate.
      */
     public void placeNextLevel(GameNextLevel gameNextLevel, int x, int y) {
+        if (gameNextLevel == null) {
+            throw new IllegalArgumentException("GameObjects cannot be null.");
+        }
         if (x >= 0 && x < NUMBER_OF_SQUARES && y >= 0 && y < NUMBER_OF_SQUARES) {
             board[x][y] = gameNextLevel.getCode();
+        } else {
+            throw new IllegalArgumentException("Coordinates out of bounds.");
         }
     }
 

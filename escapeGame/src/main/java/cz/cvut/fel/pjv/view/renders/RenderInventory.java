@@ -6,8 +6,8 @@ package cz.cvut.fel.pjv.view.renders;
 
 import cz.cvut.fel.pjv.model.Inventory;
 import cz.cvut.fel.pjv.model.Item;
-import cz.cvut.fel.pjv.view.ObjectPlacer;
-import cz.cvut.fel.pjv.view.ObjectPlacer_Level2;
+import cz.cvut.fel.pjv.view.placers.ObjectPlacerBase;
+import cz.cvut.fel.pjv.view.placers.ObjectPlacer_Level1;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -40,7 +40,7 @@ public class RenderInventory {
      *  Displays the player's inventory in a separate window.
      * @param objectPlacer Provide a brief description of the role of the ObjectPlacer parameter.
      */
-    public void displayInventory(ObjectPlacer objectPlacer) {
+    public void displayInventory(ObjectPlacerBase objectPlacer) {
 
         if (objectPlacer.getPlayer().getHealth() == 0) {
             RenderMessage.displayGameOver();
@@ -148,7 +148,7 @@ public class RenderInventory {
      * If the key pressed is the plus key, displays the crafting items window.
      * @param event The KeyEvent representing the key press event.
      */
-    private void handleCraftingEvent(KeyEvent event, ObjectPlacer objectPlacer) {
+    private void handleCraftingEvent(KeyEvent event, ObjectPlacerBase objectPlacer) {
         if (event.getCode() == KeyCode.ADD || event.getCode() == KeyCode.PLUS) {
             renderCratingItems.displayCraftingItems(objectPlacer, this);
         }

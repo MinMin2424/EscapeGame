@@ -5,6 +5,7 @@
 package cz.cvut.fel.pjv.view.renders;
 
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
 import cz.cvut.fel.pjv.view.MessageInfo;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -122,8 +123,20 @@ public class RenderMessage {
     public static void usingSwordToSaveYourself() {
         String title = "USING SWORD!";
         String message = "You just used SWORD to save yourself.";
-        String message2 = "SWORD is removed from inventory";
+        String message2 = "SWORD is removed from inventory.";
         String imageName = CraftingItems.SWORD.getImageName();
+
+        displayMessage(new MessageInfo(title, message, message2, imageName));
+    }
+
+    /**
+     * Displays a message informing the player about using water to save themselves.
+     */
+    public static void usingWaterToSaveYourself() {
+        String title = "USING WATER!";
+        String message = "You just used WATER to save yourself.";
+        String message2 = "WATER_ITEM is removed from inventory.";
+        String imageName = GameItems.WATER_ITEM.getImageName();
 
         displayMessage(new MessageInfo(title, message, message2, imageName));
     }

@@ -6,7 +6,8 @@ package cz.cvut.fel.pjv.view.renders;
 
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
-import cz.cvut.fel.pjv.view.ObjectPlacer;
+import cz.cvut.fel.pjv.view.placers.ObjectPlacerBase;
+import cz.cvut.fel.pjv.view.placers.ObjectPlacer_Level1;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -32,7 +33,7 @@ public class RenderCratingItems {
      * @param objectPlacer The ObjectPlacer object used to access player's inventory a craft items.
      * @param renderInventory The RenderInventory object used to update and display player's inventory.
      */
-    public void displayCraftingItems(ObjectPlacer objectPlacer, RenderInventory renderInventory) {
+    public void displayCraftingItems(ObjectPlacerBase objectPlacer, RenderInventory renderInventory) {
         if (objectPlacer.getPlayer().getHealth() == 0) {
             RenderMessage.displayGameOver();
             return;
@@ -80,7 +81,7 @@ public class RenderCratingItems {
      * @param objectPlacer The ObjectPlacer object used to access player's inventory and craft items.
      * @param renderInventory The RenderInventory object used to update and display player's inventory.
      */
-    private void craftingItems(Scene scene, ObjectPlacer objectPlacer, RenderInventory renderInventory) {
+    private void craftingItems(Scene scene, ObjectPlacerBase objectPlacer, RenderInventory renderInventory) {
 
         scene.setOnKeyPressed(event -> {
             switch (event.getCode()) {
@@ -201,8 +202,16 @@ public class RenderCratingItems {
      * @param graphicsContext The GraphicsContext used to render the details.
      */
     private void renderDetail(GraphicsContext graphicsContext) {
+        renderDetail_SWORD(graphicsContext);
+        renderDetail_POTION(graphicsContext);
+    }
 
-        //SWORD
+    /**
+     * Renders the details of the SWORD crafting recipe on the graphics context.
+     * @param graphicsContext The graphics content on which the details will be rendered.
+     */
+    private void renderDetail_SWORD(GraphicsContext graphicsContext) {
+
         String swordDescription = "SWORD - crafted using 3 ORES";
         Image swordImage = new Image(CraftingItems.SWORD.getImageName());
         Image oreImage = new Image(GameItems.ORE.getImageName());
@@ -217,7 +226,14 @@ public class RenderCratingItems {
             graphicsContext.drawImage(oreImage, 140 + i * 40, 260, 32, 32);
         }
 
-        // POTION
+    }
+
+    /**
+     * Renders the details of the POTION crafting recipe on the graphics context.
+     * @param graphicsContext The graphics context on which the details will be rendered.
+     */
+    private void renderDetail_POTION(GraphicsContext graphicsContext) {
+
         String potionDescription = "POTION - crafted using 1 HERB and 1 WATER_ITEM";
         Image potionImage = new Image(CraftingItems.POTION.getImageName());
         Image herbImage = new Image(GameItems.HERB.getImageName());

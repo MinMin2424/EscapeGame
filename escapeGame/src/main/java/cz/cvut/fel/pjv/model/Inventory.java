@@ -30,6 +30,9 @@ public class Inventory {
      * @param item The item to be added.
      */
     public void addItem(Item item) {
+        if (item == null) {
+            return;
+        }
         boolean found = false;
         for (Item i: items) {
             if (i.getName().equals(item.getName())) {

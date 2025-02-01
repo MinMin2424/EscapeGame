@@ -2,19 +2,11 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.view;
+package cz.cvut.fel.pjv.view.placers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.Player;
-import cz.cvut.fel.pjv.model.PlayerController;
-import cz.cvut.fel.pjv.model.direction.Direction;
-import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameNextLevel;
-import cz.cvut.fel.pjv.save.GameData;
-
-import java.io.File;
-import java.io.IOException;
 
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.HERB;
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.ORE;
@@ -26,70 +18,31 @@ import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.WATER;
 
 /**
  * Handles the placement of objects and items on the game board at the start of the game.
+ * Inherits from ObjectPlacerBase.
  */
-public class ObjectPlacer {
-
-    private final GameBoard gameBoard; // The game board where objects and items are placed
-    private Player player; // The player object
-    protected final PlayerController playerController; // The controller for player movement
-    private final ObjectMapper objectMapper = new ObjectMapper();
+public class ObjectPlacer_Level1 extends ObjectPlacerBase {
 
     /**
-     * Constructs an ObjectPlacer object with the specified game board.
-     * Initializes the player object and player controller.
+     * Constructs an ObjectPlacer_Level1 object with the specified game board.
      * @param gameBoard The game board where the objects and items will be placed.
      */
-    public ObjectPlacer(GameBoard gameBoard) {
-        this.gameBoard = gameBoard;
-        loadPlayerPositionFromFile();
-        this.playerController = new PlayerController(player, gameBoard);
+    public ObjectPlacer_Level1(GameBoard gameBoard) {
+        super(gameBoard);
     }
 
     /**
-     * Retrieves the player object.
-     * @return The player object.
+     * Retrieves the default position for the player in Level 1.
+     * @return The default player object with the specified position.
      */
-    public Player getPlayer() {
-        return this.player;
-    }
-
-    /**
-     * Sets the player object to the specified player.
-     * @param player The player object to be set.
-     */
-    public void setPlayer (Player player) {
-        this.player = player;
-    }
-
-    /**
-     * Loads the player position from a JSON file.
-     * If the file exists and contains player data, the player's position is loaded from the file.
-     * If the file does not exist or there is an error reading it, default player position (9,0) is set.
-     */
-    private void loadPlayerPositionFromFile() {
-
-        try {
-            String LOAD_GAME_FILE = "saveGame.json";
-            GameData gameData = objectMapper.readValue(new File(LOAD_GAME_FILE), GameData.class);
-            if (gameData.player != null) {
-                this.player = gameData.player;
-                int loadPlayerX = gameData.player.getPlayerX();
-                int loadPlayerY = gameData.player.getPlayerY();
-                player.setPlayerX(loadPlayerX);
-                player.setPlayerY(loadPlayerY);
-            } else {
-                this.player = new Player(9, 0);
-            }
-
-        } catch (IOException e) {
-//            System.err.println("Cannot load game: " + e.getMessage());
-            this.player = new Player(9, 0);
-        }
+    @Override
+    protected Player getDefaultPlayerPosition() {
+        return new Player(9, 0);
     }
 
     /**
      * Starts the game by placing objects, obstacles and items on the game board.
      */
+    @Override
     public void startGame() {
 
         gameBoard.placePlayer(player);

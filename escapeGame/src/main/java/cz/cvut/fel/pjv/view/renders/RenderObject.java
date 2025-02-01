@@ -36,35 +36,44 @@ public class RenderObject {
         // Iterate through the game board and render objects and items
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
+                renderTile(graphicsContext, board[i][j], i, j, tileDim);
+            }
+        }
+    }
 
-                if (board[i][j] != 0) { // Checks if the tile is not empty
+    /**
+     * Renders an image for the specified object code at the given row and column on the graphics context.
+     * @param graphicsContext The graphics context to render the image on.
+     * @param objectCode The code representing the object or item to render.
+     * @param row The row position on the game board.
+     * @param col The column position on the game board.
+     * @param tileDim The dimension of a tile.
+     */
+    private void renderTile(GraphicsContext graphicsContext, int objectCode, int row, int col, int tileDim) {
+        if (objectCode != 0) { // Checks if the tile is not empty
+            Image image = getImage(objectCode); // Get the image for the object code
+            graphicsContext.drawImage(image, col * tileDim, row * tileDim, tileDim, tileDim); // Render the image
+        }
+    }
 
-                    int objectCode = board[i][j]; // Get the code representing the object or item
-                    Image image; // Image to render
-
-                    // Determine the type of object or item and load the corresponding image
-                    GameObjects gameObjects = GameObjects.getByCode(objectCode);
-                    if (gameObjects != null) {
-                        image = new Image(gameObjects.getImageName());
-
-                    } else {
-
-                        GameItems gameItems = GameItems.getByCode(objectCode);
-                        GameNextLevel gameNextLevel = GameNextLevel.NEXT_LEVEL;
-                        if (gameItems != null) {
-                            image = new Image(gameItems.getImageName());
-
-                        } else if (objectCode == 1) { // Player character
-                            image = new Image("character.png");
-
-                        } else {
-                            image = new Image(gameNextLevel.getImageName());
-
-                        }
-                    }
-                    // Render the image on the graphics context at the appropriate position
-                    graphicsContext.drawImage(image, j * tileDim, i * tileDim, tileDim, tileDim);
-                }
+    /**
+     * Retrieved the image corresponding to the given object code.
+     * @param objectCode The code representing the object or item.
+     * @return The image corresponding to the object code.
+     */
+    private Image getImage(int objectCode) {
+        // Determine the type of object or item and load the corresponding image
+        GameObjects gameObjects = GameObjects.getByCode(objectCode);
+        if (gameObjects != null) {
+            return new Image(gameObjects.getImageName());
+        } else {
+            GameItems gameItems = GameItems.getByCode(objectCode);
+            if (gameItems != null) {
+                return new Image(gameItems.getImageName());
+            } else if (objectCode == 1) {
+                return new Image("character.png");
+            } else {
+                return new Image(GameNextLevel.NEXT_LEVEL.getImageName());
             }
         }
     }

@@ -2,7 +2,7 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.save;
+package cz.cvut.fel.pjv.gameData;
 
 import cz.cvut.fel.pjv.model.Player;
 

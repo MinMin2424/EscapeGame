@@ -24,39 +24,20 @@ public class ItemFactory {
      * @return The created item, or null if creation failed.
      */
     public static Item createItem(CraftingItems craftingItems, Inventory inventory) {
+        if (inventory == null || craftingItems == null) return null;
+
         int[] requiredItems = craftingItems.getRequiredItems();
         String[] items_inventory = getItemName(inventory);
 
         List<String> itemList = new ArrayList<>(Arrays.asList(items_inventory));
 
-        for (int itemCode : requiredItems) {
-            GameItems requiredItem = GameItems.getByCode(itemCode);
-            boolean found = false;
-
-            for (int i = 0; i < itemList.size(); i++) {
-                assert requiredItem != null;
-                if (itemList.get(i).equals(requiredItem.name())) {
-                    found = true;
-                    itemList.remove(itemList.get(i));
-                    break;
-                }
-            }
-
-            if (!found) {
-                return null;
-            }
+        if (!hasRequiredItems(itemList, requiredItems)) {
+            return null;
         }
 
-        for (int itemCode : requiredItems) {
-            String itemName = Objects.requireNonNull(GameItems.getByCode(itemCode)).name();
-            Item requiredItem = new Item(itemName, 1);
-            inventory.removeItem(requiredItem);
-        }
+        removeRequiredItemsFromInventory(requiredItems, inventory);
 
-        return switch (craftingItems) {
-            case SWORD -> new Item(CraftingItems.SWORD.name(), 1);
-            case POTION -> new Item(CraftingItems.POTION.name(), 1);
-        };
+        return createCraftedItem(craftingItems);
 
     }
 
@@ -76,6 +57,58 @@ public class ItemFactory {
             }
         }
         return itemNameList.toArray(new String[0]);
+    }
+
+    /**
+     * Checks if the inventory has all the required items for crafting.
+     * @param itemList The list of items in the inventory.
+     * @param requiredItems An array of required item codes.
+     * @return {@code true} if the inventory contains all required items, {@code false} otherwise.
+     */
+    private static boolean hasRequiredItems(List<String> itemList, int[] requiredItems) {
+        for (int itemCode : requiredItems) {
+            GameItems requiredItem = GameItems.getByCode(itemCode);
+            boolean found = false;
+
+            for (int i = 0; i < itemList.size(); i++) {
+                assert requiredItem != null;
+                if (itemList.get(i).equals(requiredItem.name())) {
+                    found = true;
+                    itemList.remove(itemList.get(i));
+                    break;
+                }
+            }
+
+            if (!found) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Removes the required items from the inventory after crafting.
+     * @param requiredItems An array of required item codes.
+     * @param inventory The inventory from which items will be removed.
+     */
+    private static void removeRequiredItemsFromInventory(int[] requiredItems, Inventory inventory) {
+        for (int itemCode : requiredItems) {
+            String itemName = Objects.requireNonNull(GameItems.getByCode(itemCode)).name();
+            Item requiredItem = new Item(itemName, 1);
+            inventory.removeItem(requiredItem);
+        }
+    }
+
+    /**
+     * Creates the crafted item based on the specified crafting item type.
+     * @param craftingItems The type of the crafting item.
+     * @return The crafted item.
+     */
+    protected static Item createCraftedItem(CraftingItems craftingItems) {
+        return switch (craftingItems) {
+            case SWORD -> new Item(CraftingItems.SWORD.name(), 1);
+            case POTION -> new Item(CraftingItems.POTION.name(), 1);
+        };
     }
 
 }

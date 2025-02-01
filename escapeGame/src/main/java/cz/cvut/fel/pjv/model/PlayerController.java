@@ -18,7 +18,7 @@ public class PlayerController {
     private final Player player; // The controlled player
     private final GameBoard gameBoard; // The game board
     public boolean transition;
-    public boolean isSaved;
+    public boolean isSaved, removeFire;
 
     /**
      * Constructors a new PlayerController with a specified player and game board.
@@ -28,38 +28,6 @@ public class PlayerController {
     public PlayerController(Player player, GameBoard gameBoard) {
         this.player = player;
         this.gameBoard = gameBoard;
-    }
-
-    /**
-     * Indicates whether the game is currently in transition to another level.
-     * @return True if the game is in transition to another level, otherwise false.
-     */
-    public boolean isTransition() {
-        return transition;
-    }
-
-    /**
-     * Sets the transition state of the game.
-     * @param transition transition true to indicate that the game is transitioning to another level, false otherwise.
-     */
-    public void setTransition(boolean transition) {
-        this.transition = transition;
-    }
-
-    /**
-     * Indicates whether the player's progress in the game is currently saved.
-     * @return True if the player's progress is saved, otherwise false.
-     */
-    public boolean isSaved() {
-        return isSaved;
-    }
-
-    /**
-     * Sets the saved state of the player's progress in the game.
-     * @param saved true to indicate that the player's progress is saved, false otherwise.
-     */
-    public void setSaved(boolean saved) {
-        isSaved = saved;
     }
 
     /**
@@ -82,21 +50,14 @@ public class PlayerController {
         int newY = currentY;
 
         switch (direction) {
-            case UP:
-                newX--;
-                break;
-            case DOWN:
-                newX++;
-                break;
-            case LEFT:
-                newY--;
-                break;
-            case RIGHT:
-                newY++;
-                break;
-            default:
+            case UP -> newX--;
+            case DOWN -> newX++;
+            case LEFT -> newY--;
+            case RIGHT -> newY++;
+            default -> {
                 System.out.println("Neznámý směr pohybu.");
                 return;
+            }
         }
 
         // Check if the new position is outside the game board
@@ -121,30 +82,11 @@ public class PlayerController {
 
         GameObjects object = GameObjects.getByCode(objectCode);
         if (object != null && object.isDamage()) {
-
-            if (object == GameObjects.FIRE && hasItem(GameItems.WATER_ITEM.name())) {
-                player.useItem(GameItems.WATER_ITEM.name());
-                System.out.println("Použil jsi WATER_ITEM k zhasnutí ohně.");
-                gameBoard.getBoard()[newX][newY] = 0; // Remove the fire
-
-            } else if (object == GameObjects.GHOST && hasItem(CraftingItems.SWORD.name())) {
-                player.useItem(CraftingItems.SWORD.name());
-                setSaved(true);
-                System.out.println("Použil jsi SWORD k boji s duchem.");
-                gameBoard.getBoard()[newX][newY] = 0;
-
-            } else {
-                player.collideWithObstacle(object);
-            }
+            collideWithObjects(object, newX, newY);
 
         } else {
             GameItems item = GameItems.getByCode(objectCode);
-            if (item != null) {
-                player.collideWithItem(item);
-                gameBoard.getBoard()[newX][newY] = 0; // Remove the item
-            }
-
-            // Move the player to the new position
+            collideWithItems(item, newX, newY);
             movePlayer(currentX, currentY, newX, newY);
         }
     }
@@ -203,4 +145,91 @@ public class PlayerController {
         player.setPlayerY(newY); // Set the new Y-coordinate of the player
         gameBoard.placePlayer(player); // Place the player at the new position
     }
+
+    /**
+     * Handles collision between the player and objects on the game board.
+     * @param object The game object the player collided with.
+     * @param x The x-coordinate of the collision.
+     * @param y The y-coordinate of the collision.
+     */
+    private void collideWithObjects(GameObjects object, int x, int y) {
+        if (object == GameObjects.FIRE && hasItem(GameItems.WATER_ITEM.name())) {
+            player.useItem(GameItems.WATER_ITEM.name());
+            setRemoveFire(true);
+            System.out.println("Použil jsi WATER_ITEM k zhasnutí ohně.");
+            gameBoard.getBoard()[x][y] = 0; // Remove the fire
+
+        } else if (object == GameObjects.GHOST && hasItem(CraftingItems.SWORD.name())) {
+            player.useItem(CraftingItems.SWORD.name());
+            setSaved(true);
+            System.out.println("Použil jsi SWORD k boji s duchem.");
+            gameBoard.getBoard()[x][y] = 0;
+
+        } else {
+            player.collideWithObstacle(object);
+        }
+    }
+
+    /**
+     * Handles collision between the player and items on the game board.
+     * @param item The game item the player collided with.
+     * @param x The x-coordinate of the collision.
+     * @param y The y-coordinate of the collision.
+     */
+    private void collideWithItems(GameItems item, int x, int y) {
+        if (item != null) {
+            player.collideWithItem(item);
+            gameBoard.getBoard()[x][y] = 0; // Remove the item
+        }
+    }
+
+    /**
+     * Indicates whether the game is currently in transition to another level.
+     * @return True if the game is in transition to another level, otherwise false.
+     */
+    public boolean isTransition() {
+        return transition;
+    }
+
+    /**
+     * Sets the transition state of the game.
+     * @param transition transition true to indicate that the game is transitioning to another level, false otherwise.
+     */
+    public void setTransition(boolean transition) {
+        this.transition = transition;
+    }
+
+    /**
+     * Indicates whether the player's progress in the game is currently saved.
+     * @return True if the player's progress is saved, otherwise false.
+     */
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    /**
+     * Sets the saved state of the player's progress in the game.
+     * @param saved true to indicate that the player's progress is saved, false otherwise.
+     */
+    public void setSaved(boolean saved) {
+        isSaved = saved;
+    }
+
+    /**
+     * Checks if the player removes fire by using water item.
+     * @return true if the player removes fire, false otherwise.
+     */
+    public boolean isRemoveFire() {
+        return removeFire;
+    }
+
+    /**
+     * Sets the flag indicating whether the player removes fire by using water item.
+     * @param removeFire true if the player removes fire, false otherwise.
+     */
+    public void setRemoveFire(boolean removeFire) {
+        this.removeFire = removeFire;
+    }
+
+
 }
