@@ -2,7 +2,7 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.view;
+package cz.cvut.fel.pjv.view.renders;
 
 import cz.cvut.fel.pjv.model.GameBoard;
 import javafx.scene.canvas.GraphicsContext;

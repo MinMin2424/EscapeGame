@@ -2,9 +2,10 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.view;
+package cz.cvut.fel.pjv.view.renders;
 
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
+import cz.cvut.fel.pjv.view.MessageInfo;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -111,6 +112,30 @@ public class RenderMessage {
         String message = "Failed to use POTION.";
         String message2 = "You have no POTION or you have full lives.";
         String imageName = CraftingItems.POTION.getImageName();
+
+        displayMessage(new MessageInfo(title, message, message2, imageName));
+    }
+
+    /**
+     * Displays a message indicating that the player has used the sword to save themselves.
+     */
+    public static void usingSwordToSaveYourself() {
+        String title = "USING SWORD!";
+        String message = "You just used SWORD to save yourself.";
+        String message2 = "SWORD is removed from inventory";
+        String imageName = CraftingItems.SWORD.getImageName();
+
+        displayMessage(new MessageInfo(title, message, message2, imageName));
+    }
+
+    /**
+     * Displays a message indicating the transition to the next level.
+     */
+    public static void transitionToTheNextLevel() {
+        String title = "TRANSITION TO THE NEXT LEVEL!";
+        String message = "You won the first level. Congratulations!";
+        String message2 = "Transition to the second level...";
+        String imageName = "level_up.png";
 
         displayMessage(new MessageInfo(title, message, message2, imageName));
     }

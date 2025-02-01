@@ -19,4 +19,6 @@ module cz.cvut.fel.pjv {
     opens cz.cvut.fel.pjv to javafx.fxml;
 
     exports cz.cvut.fel.pjv.save;
+    exports cz.cvut.fel.pjv.view.renders;
+    opens cz.cvut.fel.pjv.view.renders to javafx.fxml;
 }

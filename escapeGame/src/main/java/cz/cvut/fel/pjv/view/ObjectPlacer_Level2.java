@@ -17,27 +17,48 @@ import java.io.IOException;
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameItems.*;
 import static cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects.*;
 
+/**
+ * This class handles the placement of objects for level 2 of the game.
+ * It initializes the gae board, places the player, objects, items, and defines the starting positions.
+ */
 public class ObjectPlacer_Level2 {
 
-    private final GameBoard gameBoard;
-    private Player player;
-    protected final PlayerController playerController;
+    private final GameBoard gameBoard; // The game board where objects and items are placed
+    private Player player; // The player object
+    protected final PlayerController playerController; // The controller for player movement
     private final ObjectMapper objectMapper = new ObjectMapper();
 
+    /**
+     * Constructs an ObjectPlacer_Level2 with the given game board.
+     * @param gameBoard The gameBoard for level 2.
+     */
     public ObjectPlacer_Level2(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
         loadPlayerPositionFromFile();
         this.playerController = new PlayerController(player, gameBoard);
     }
 
+    /**
+     * Retrieves the player object.
+     * @return The player object.
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Sets the player object.
+     * @param player The player object to set.
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }
 
+    /**
+     * Loads the player position from a JSON file.
+     * If the file exists and contains player data, the player's position is loaded from the file.
+     * If the file does not exist or there is an error reading it, default player position (9,9) is set.
+     */
     private void loadPlayerPositionFromFile() {
 
         try {
@@ -58,13 +79,17 @@ public class ObjectPlacer_Level2 {
         }
     }
 
+    /**
+     * Starts the game for level 2 by placing objects, items, and the player on the game board.
+     */
     public void startGame() {
 
         gameBoard.placePlayer(player);
 
         gameBoard.placeObject(FIRE, 0, 0); gameBoard.placeObject(FIRE, 0, 1); gameBoard.placeObject(FIRE, 0, 2);
-        gameBoard.placeObject(GHOST, 0, 3); gameBoard.placeObject(GHOST, 0, 4); gameBoard.placeObject(GHOST, 0, 5);
-        gameBoard.placeObject(GHOST, 0, 6); gameBoard.placeObject(GHOST, 0, 7);
+        gameBoard.placeObject(GHOST, 0, 3);
+//        gameBoard.placeObject(GHOST, 0, 4); gameBoard.placeObject(GHOST, 0, 5);
+//        gameBoard.placeObject(GHOST, 0, 6); gameBoard.placeObject(GHOST, 0, 7);
 
         gameBoard.placeObject(WALL, 1, 8);
 
@@ -80,8 +105,9 @@ public class ObjectPlacer_Level2 {
 
         gameBoard.placeObject(FIRE, 5, 0); gameBoard.placeObject(FIRE, 5, 6); gameBoard.placeObject(WALL, 5, 9);
 
-        gameBoard.placeObject(GHOST, 6, 1); gameBoard.placeObject(GHOST, 6, 2); gameBoard.placeObject(GHOST, 6, 3);
-        gameBoard.placeObject(GHOST, 6, 4); gameBoard.placeObject(GHOST, 6, 5);
+        gameBoard.placeObject(GHOST, 6, 1);
+//        gameBoard.placeObject(GHOST, 6, 2); gameBoard.placeObject(GHOST, 6, 3);
+//        gameBoard.placeObject(GHOST, 6, 4); gameBoard.placeObject(GHOST, 6, 5);
         gameBoard.placeObject(WALL, 6, 6); gameBoard.placeObject(WALL, 6, 7);
 
         gameBoard.placeObject(FIRE, 7, 0); gameBoard.placeObject(WALL, 7, 1); gameBoard.placeObject(WALL, 7, 2);
@@ -100,6 +126,6 @@ public class ObjectPlacer_Level2 {
         System.out.println(" ");
         System.out.println("LEVEL 2: ");
         System.out.println("HEALTH: " + player.getHealth());
-        gameBoard.drawBoard();
+
     }
 }

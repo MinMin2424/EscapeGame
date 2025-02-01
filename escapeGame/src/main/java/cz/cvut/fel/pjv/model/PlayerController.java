@@ -18,6 +18,7 @@ public class PlayerController {
     private final Player player; // The controlled player
     private final GameBoard gameBoard; // The game board
     public boolean transition;
+    public boolean isSaved;
 
     /**
      * Constructors a new PlayerController with a specified player and game board.
@@ -29,14 +30,36 @@ public class PlayerController {
         this.gameBoard = gameBoard;
     }
 
-    // TODO
+    /**
+     * Indicates whether the game is currently in transition to another level.
+     * @return True if the game is in transition to another level, otherwise false.
+     */
     public boolean isTransition() {
         return transition;
     }
 
-    // TODO
+    /**
+     * Sets the transition state of the game.
+     * @param transition transition true to indicate that the game is transitioning to another level, false otherwise.
+     */
     public void setTransition(boolean transition) {
         this.transition = transition;
+    }
+
+    /**
+     * Indicates whether the player's progress in the game is currently saved.
+     * @return True if the player's progress is saved, otherwise false.
+     */
+    public boolean isSaved() {
+        return isSaved;
+    }
+
+    /**
+     * Sets the saved state of the player's progress in the game.
+     * @param saved true to indicate that the player's progress is saved, false otherwise.
+     */
+    public void setSaved(boolean saved) {
+        isSaved = saved;
     }
 
     /**
@@ -91,11 +114,8 @@ public class PlayerController {
             if (!handleNextLevel()) {
                 return;
             }
-            //  TODO
+
             setTransition(true);
-//             Transition to the next level ...
-//            ObjectPlacer_Level2 gamePosition2 = new ObjectPlacer_Level2(new GameBoard());
-//            gamePosition2.startGame();
             return;
         }
 
@@ -109,6 +129,7 @@ public class PlayerController {
 
             } else if (object == GameObjects.GHOST && hasItem(CraftingItems.SWORD.name())) {
                 player.useItem(CraftingItems.SWORD.name());
+                setSaved(true);
                 System.out.println("Použil jsi SWORD k boji s duchem.");
                 gameBoard.getBoard()[newX][newY] = 0;
 

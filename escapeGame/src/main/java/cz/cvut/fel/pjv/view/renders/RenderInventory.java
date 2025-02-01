@@ -2,11 +2,12 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.view;
+package cz.cvut.fel.pjv.view.renders;
 
-import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.Inventory;
 import cz.cvut.fel.pjv.model.Item;
+import cz.cvut.fel.pjv.view.ObjectPlacer;
+import cz.cvut.fel.pjv.view.ObjectPlacer_Level2;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;

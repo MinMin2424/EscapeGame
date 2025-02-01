@@ -6,6 +6,9 @@ package cz.cvut.fel.pjv.view;
 
 import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GhostPosition;
+import cz.cvut.fel.pjv.view.renders.RenderBackground;
+import cz.cvut.fel.pjv.view.renders.RenderObject;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -51,12 +54,12 @@ public class GhostMovement {
     /**
      * Starts the movement of the ghost by scheduling periodic updates.
      */
-    public void startMovement() {
+    public void startMovement(GhostPosition ghost) {
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                moveGhost();
+                moveGhost(ghost);
                 renderGame();
             }
         }, 1000, 1000); // Update ghost movement every second
@@ -68,12 +71,19 @@ public class GhostMovement {
      * Change direction when reaching boundaries or final position.
      * Move ghost and then set new position.
      */
-    private void moveGhost() {
+    private void moveGhost(GhostPosition ghost) {
         gameBoard.getBoard()[currentX][currentY] = 0;
 
-        if (currentY == finalY || currentY == 2 || currentY == 5) {
-            direction *= -1;
+        if (ghost == GhostPosition.GHOST1 || ghost == GhostPosition.GHOST2) {
+            if (currentY == finalY || currentY == 2 || currentY == 5) {
+                direction *= -1;
+            }
+        } else if (ghost == GhostPosition.GHOST3 || ghost == GhostPosition.GHOST4) {
+            if (currentY == finalY || currentY == 1 || currentY == 3) {
+                direction *= -1;
+            }
         }
+
 
         currentY += direction;
         gameBoard.getBoard()[currentX][currentY] = GameObjects.GHOST.getCode();

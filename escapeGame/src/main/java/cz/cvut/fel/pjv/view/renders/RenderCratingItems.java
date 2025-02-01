@@ -2,10 +2,11 @@
  * @author tranomin@fel.cvut.cz
  */
 
-package cz.cvut.fel.pjv.view;
+package cz.cvut.fel.pjv.view.renders;
 
 import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameItems;
+import cz.cvut.fel.pjv.view.ObjectPlacer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

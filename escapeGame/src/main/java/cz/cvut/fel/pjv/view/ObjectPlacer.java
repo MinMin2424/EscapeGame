@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.Player;
 import cz.cvut.fel.pjv.model.PlayerController;
+import cz.cvut.fel.pjv.model.direction.Direction;
+import cz.cvut.fel.pjv.model.gameObjects_Items.CraftingItems;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GameNextLevel;
 import cz.cvut.fel.pjv.save.GameData;
 
@@ -80,7 +82,7 @@ public class ObjectPlacer {
             }
 
         } catch (IOException e) {
-            System.err.println("Cannot load game: " + e.getMessage());
+//            System.err.println("Cannot load game: " + e.getMessage());
             this.player = new Player(9, 0);
         }
     }
