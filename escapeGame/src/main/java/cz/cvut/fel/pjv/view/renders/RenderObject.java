@@ -11,11 +11,15 @@ import cz.cvut.fel.pjv.model.gameObjects_Items.GameObjects;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Handles the rendering of objects and items on the game board.
  */
 public class RenderObject {
     private final GameBoard gameBoard; // The game board containing object positions
+    private final Map<Integer, Image> imageMap;
 
     /**
      * Constructs an ObjectRender object with the specified game board.
@@ -23,6 +27,7 @@ public class RenderObject {
      */
     public RenderObject(GameBoard gameBoard) {
         this.gameBoard = gameBoard;
+        this.imageMap = new HashMap<>();
     }
 
     /**
@@ -62,6 +67,23 @@ public class RenderObject {
      * @return The image corresponding to the object code.
      */
     private Image getImage(int objectCode) {
+        if (imageMap.containsKey(objectCode)) {
+            return imageMap.get(objectCode);
+        } else {
+            Image image = loadNewImage(objectCode);
+            imageMap.put(objectCode, image);
+            return image;
+        }
+    }
+
+
+    /**
+     * Loads a new image based on the object code.
+     *
+     * @param objectCode The code representing the object or item.
+     * @return The loaded image corresponding to the object code.
+     */
+    private Image loadNewImage(int objectCode) {
         // Determine the type of object or item and load the corresponding image
         GameObjects gameObjects = GameObjects.getByCode(objectCode);
         if (gameObjects != null) {

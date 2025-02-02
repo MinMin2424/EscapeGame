@@ -23,4 +23,5 @@ module cz.cvut.fel.pjv {
     opens cz.cvut.fel.pjv.view.renders to javafx.fxml;
     exports cz.cvut.fel.pjv.model.placers;
     opens cz.cvut.fel.pjv.model.placers to javafx.fxml;
+    opens cz.cvut.fel.pjv.gameData to javafx.fxml;
 }

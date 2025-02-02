@@ -23,6 +23,7 @@ public class GhostMovement {
     private final GameBoard gameBoard; // The game board where the ghost moves
     private final int currentX; // The current x-coordinate of the ghost
     private int currentY; // The current y-coordinate of the ghost
+    private final int startY;
     private final int finalY; // The final y-coordinate where the ghost moves
     private int direction; // The direction of movement (-1 or 1)
     private final GraphicsContext graphicsContext; // The graphics context for rendering
@@ -32,18 +33,21 @@ public class GhostMovement {
 
     /**
      * Constructs a GhostMovement object with the specified parameters.
-     * @param gameBoard The game board where the ghost moves.
-     * @param currentX The initial x-coordinate of the ghost.
-     * @param currentY The initial y-coordinate of the ghost.
-     * @param finalY The final y-coordinate where the ghost moves.
-     * @param graphicsContext The graphics context for rendering.
+     *
+     * @param gameBoard        The game board where the ghost moves.
+     * @param currentX         The initial x-coordinate of the ghost.
+     * @param currentY         The initial y-coordinate of the ghost.
+     * @param startY           The start y-coordinate where the ghost moves.
+     * @param finalY           The final y-coordinate where the ghost moves.
+     * @param graphicsContext  The graphics context for rendering.
      * @param renderBackground The renderer for the game background.
-     * @param renderObject The renderer for game objects.
+     * @param renderObject     The renderer for game objects.
      */
-    public GhostMovement(GameBoard gameBoard, int currentX, int currentY, int finalY, GraphicsContext graphicsContext, RenderBackground renderBackground, RenderObject renderObject) {
+    public GhostMovement(GameBoard gameBoard, int currentX, int currentY, int startY, int finalY, GraphicsContext graphicsContext, RenderBackground renderBackground, RenderObject renderObject) {
         this.gameBoard = gameBoard;
         this.currentX = currentX;
         this.currentY = currentY;
+        this.startY = startY;
         this.finalY = finalY;
         this.direction = -1; // Default movement direction
         this.graphicsContext = graphicsContext;
@@ -74,14 +78,13 @@ public class GhostMovement {
     private void moveGhost(GhostPosition ghost) {
         gameBoard.getBoard()[currentX][currentY] = 0;
 
-        if (ghost == GhostPosition.GHOST1 || ghost == GhostPosition.GHOST2) {
-            if (currentY == finalY || currentY == 2 || currentY == 5) {
-                direction *= -1;
-            }
+        if (currentY == finalY || currentY == startY || gameBoard.getBoard()[currentX][currentY+1] != 0 || gameBoard.getBoard()[currentX][currentY-1] != 0) {
+            direction *= -1;
         }
 
-
         currentY += direction;
+        ghost.setPositionY(currentY);
+
         gameBoard.getBoard()[currentX][currentY] = GameObjects.GHOST.getCode();
     }
 

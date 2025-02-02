@@ -8,9 +8,9 @@ import cz.cvut.fel.pjv.model.GameBoard;
 import cz.cvut.fel.pjv.model.PlayerController;
 import cz.cvut.fel.pjv.model.direction.Direction;
 import cz.cvut.fel.pjv.gameData.GameStateManager;
+import cz.cvut.fel.pjv.model.gameObjects_Items.GhostPosition;
 import cz.cvut.fel.pjv.view.GhostMovement;
 import cz.cvut.fel.pjv.model.placers.ObjectPlacerBase;
-import cz.cvut.fel.pjv.model.placers.ObjectPlacer_Level1;
 import cz.cvut.fel.pjv.model.placers.ObjectPlacer_Level2;
 import cz.cvut.fel.pjv.view.renders.*;
 import javafx.geometry.Pos;
@@ -20,9 +20,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
-import static cz.cvut.fel.pjv.model.gameObjects_Items.GhostPosition.GHOST1;
-import static cz.cvut.fel.pjv.model.gameObjects_Items.GhostPosition.GHOST2;
 
 /**
  * Represents the base class for all levels in the game.
@@ -38,6 +35,9 @@ public abstract class LevelBase {
     protected final RenderInventory renderInventory;
     protected final RenderCratingItems renderCratingItems;
     protected GhostMovement ghostMovement1, ghostMovement2;
+    protected GhostPosition ghost1 = GhostPosition.GHOST1;
+    protected GhostPosition ghost2 = GhostPosition.GHOST2;
+    protected boolean loadGhost = false;
 
     /**
      * Constructs a LevelBase object with the specified object placer.
@@ -85,6 +85,7 @@ public abstract class LevelBase {
         int currentLevel = getLevel(objectPlacer);
         if (savedLevel == currentLevel || savedLevel == 2) {
             GameStateManager.loadGameState(SAVE_FILE_NAME, gameBoard);
+            loadGhost = true;
         }
 
         renderHealthForPlayer.render(heartGraphicsContext);
@@ -95,7 +96,7 @@ public abstract class LevelBase {
         if (scene.getWindow() != null) {
             scene.getWindow().setOnCloseRequest(event -> {
                 int level = getLevel(objectPlacer);
-                GameStateManager.saveGameState(SAVE_FILE_NAME, gameBoard, objectPlacer, level);
+                GameStateManager.saveGameState(SAVE_FILE_NAME, gameBoard, objectPlacer, level, ghost1, ghost2);
                 ghostMovement1.stopMovement();
                 ghostMovement2.stopMovement();
             });
@@ -176,11 +177,23 @@ public abstract class LevelBase {
      * @param graphicsContext The graphics context for rendering.
      */
     private void setupGhostMovements(GraphicsContext graphicsContext) {
-        ghostMovement1 = new GhostMovement(gameBoard, GHOST1.getPositionX(), GHOST1.getPositionY(), GHOST1.getFinalPositionY(), graphicsContext, renderBackground, renderObject);
-        ghostMovement1.startMovement(GHOST1);
+        if (loadGhost) {
+            GhostPosition loaded_ghost1 = GameStateManager.getGhost(SAVE_FILE_NAME, 1, ghost1);
+            GhostPosition loaded_ghost2 = GameStateManager.getGhost(SAVE_FILE_NAME, 2, ghost2);
 
-        ghostMovement2 = new GhostMovement(gameBoard, GHOST2.getPositionX(), GHOST2.getPositionY(), GHOST2.getFinalPositionY(), graphicsContext, renderBackground, renderObject);
-        ghostMovement2.startMovement(GHOST2);
+            ghostMovement1 = new GhostMovement(gameBoard, loaded_ghost1.getPositionX(), loaded_ghost1.getPositionY(), loaded_ghost1.getStartPositionY(), loaded_ghost1.getFinalPositionY(), graphicsContext, renderBackground, renderObject);
+            ghostMovement1.startMovement(loaded_ghost1);
+
+            ghostMovement2 = new GhostMovement(gameBoard, loaded_ghost2.getPositionX(), loaded_ghost2.getPositionY(), loaded_ghost2.getStartPositionY(), loaded_ghost2.getFinalPositionY(), graphicsContext, renderBackground, renderObject);
+            ghostMovement2.startMovement(loaded_ghost2);
+
+        } else {
+            ghostMovement1 = new GhostMovement(gameBoard, ghost1.getPositionX(), ghost1.getPositionY(), ghost1.getStartPositionY(), ghost1.getFinalPositionY(), graphicsContext, renderBackground, renderObject);
+            ghostMovement1.startMovement(ghost1);
+
+            ghostMovement2 = new GhostMovement(gameBoard, ghost2.getPositionX(), ghost2.getPositionY(), ghost2.getStartPositionY(), ghost2.getFinalPositionY(), graphicsContext, renderBackground, renderObject);
+            ghostMovement2.startMovement(ghost2);
+        }
     }
 
     /**
@@ -192,7 +205,6 @@ public abstract class LevelBase {
      */
     private static int getLevel(ObjectPlacerBase objectPlacer) {
         int level = 1;
-
         if (objectPlacer instanceof ObjectPlacer_Level2) level = 2;
         return level;
     }
