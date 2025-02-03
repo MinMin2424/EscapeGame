@@ -98,7 +98,7 @@ public class PlayerController {
      * Checks if the player has enough health for the next move.
      * @return True if the player has zero or lower health points, otherwise false.
      */
-    public  boolean checkPlayerHealth() {
+    public boolean checkPlayerHealth() {
         if (player.getHealth() <= 0) {
             loggerINFO("checkHealth");
             return true;
@@ -112,7 +112,7 @@ public class PlayerController {
      */
     protected boolean handleNextLevel() {
         if (hasItem(GameItems.KEY.name())) {
-            loggerINFO("nextLevelTrue");
+           loggerINFO("nextLevelTrue");
             return true;
         }
         loggerINFO("nextLevelFalse");

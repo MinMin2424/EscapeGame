@@ -20,6 +20,11 @@ public class Level_2 extends LevelBase {
     public Level_2() {
         super(new ObjectPlacer_Level2(new GameBoard()));
     }
+
+    @Override
+    public int getLevel() {
+        return 2;
+    }
 }
 
 

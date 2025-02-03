@@ -46,7 +46,7 @@ public class GhostMovement {
     public GhostMovement(GameBoard gameBoard, int currentX, int currentY, int startY, int finalY, GraphicsContext graphicsContext, RenderBackground renderBackground, RenderObject renderObject) {
         this.gameBoard = gameBoard;
         this.currentX = currentX;
-        this.currentY = currentY;
+        this.currentY = setPosY(currentY, finalY);
         this.startY = startY;
         this.finalY = finalY;
         this.direction = -1; // Default movement direction
@@ -76,12 +76,12 @@ public class GhostMovement {
      * Move ghost and then set new position.
      */
     private void moveGhost(GhostPosition ghost) {
-        gameBoard.getBoard()[currentX][currentY] = 0;
 
-        if (currentY == finalY || currentY == startY || gameBoard.getBoard()[currentX][currentY+1] != 0 || gameBoard.getBoard()[currentX][currentY-1] != 0) {
+        if (currentY == finalY || currentY+1 == gameBoard.getBoard().length || currentY == startY || gameBoard.getBoard()[currentX][currentY+1] != 0 || gameBoard.getBoard()[currentX][currentY-1] != 0) {
             direction *= -1;
         }
 
+        gameBoard.getBoard()[currentX][currentY] = 0;
         currentY += direction;
         ghost.setPositionY(currentY);
 
@@ -106,5 +106,19 @@ public class GhostMovement {
             timer.cancel();
             timer = null;
         }
+    }
+
+    /**
+     * Method used to set the Y position.
+     * @param posY CurrentY position.
+     * @param finalPosY Final Y position.
+     * @return Newly set Y position.
+     */
+    private int setPosY(int posY, int finalPosY) {
+        int positionY = posY;
+        if (positionY == finalPosY) {
+            positionY--;
+        }
+        return positionY;
     }
 }

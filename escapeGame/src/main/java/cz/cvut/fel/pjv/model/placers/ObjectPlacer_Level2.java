@@ -60,8 +60,7 @@ public class ObjectPlacer_Level2 extends ObjectPlacerBase {
 
         gameBoard.placeObject(FIRE, 3, 0); gameBoard.placeObject(WALL, 3, 2); gameBoard.placeObject(WALL, 3, 8);
 
-        gameBoard.placeObject(FIRE, 4, 0); gameBoard.placeObject(WALL, 4, 1); gameBoard.placeObject(GHOST, 4, 2);
-        gameBoard.placeObject(FIRE, 4, 6); gameBoard.placeObject(WALL, 4, 8);
+        gameBoard.placeObject(FIRE, 4, 0); gameBoard.placeObject(WALL, 4, 1); gameBoard.placeObject(WALL, 4, 8);
 
         gameBoard.placeObject(FIRE, 5, 0); gameBoard.placeObject(FIRE, 5, 6); gameBoard.placeObject(WALL, 5, 9);
         gameBoard.placeObject(FIRE, 5, 1); gameBoard.placeObject(FIRE, 5, 3); gameBoard.placeObject(FIRE, 5, 4);
@@ -72,8 +71,6 @@ public class ObjectPlacer_Level2 extends ObjectPlacerBase {
         gameBoard.placeObject(FIRE, 7, 0); gameBoard.placeObject(WALL, 7, 1); gameBoard.placeObject(WALL, 7, 2);
         gameBoard.placeObject(WALL, 7, 3); gameBoard.placeObject(WALL, 7, 4); gameBoard.placeObject(WALL, 7, 8);
         gameBoard.placeObject(WALL, 7, 9);
-
-        gameBoard.placeObject(GHOST, 8, 5);
 
         gameBoard.placeObject(FIRE, 9, 1); gameBoard.placeObject(FIRE, 9, 2); gameBoard.placeObject(FIRE, 9, 3);
         gameBoard.placeObject(FIRE, 9, 4); gameBoard.placeObject(FIRE, 9, 5); gameBoard.placeObject(WALL, 9, 8);

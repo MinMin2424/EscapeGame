@@ -11,7 +11,6 @@ import cz.cvut.fel.pjv.gameData.GameStateManager;
 import cz.cvut.fel.pjv.model.gameObjects_Items.GhostPosition;
 import cz.cvut.fel.pjv.view.GhostMovement;
 import cz.cvut.fel.pjv.model.placers.ObjectPlacerBase;
-import cz.cvut.fel.pjv.model.placers.ObjectPlacer_Level2;
 import cz.cvut.fel.pjv.view.renders.*;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -82,8 +81,8 @@ public abstract class LevelBase {
         objectPlacer.startGame();
 
         int savedLevel = GameStateManager.getSavedLevelFromFile(SAVE_FILE_NAME);
-        int currentLevel = getLevel(objectPlacer);
-        if (savedLevel == currentLevel || savedLevel == 2) {
+        int currentLevel = getLevel();
+        if (savedLevel == currentLevel) {
             GameStateManager.loadGameState(SAVE_FILE_NAME, gameBoard);
             loadGhost = true;
         }
@@ -95,7 +94,7 @@ public abstract class LevelBase {
 
         if (scene.getWindow() != null) {
             scene.getWindow().setOnCloseRequest(event -> {
-                int level = getLevel(objectPlacer);
+                int level = getLevel();
                 GameStateManager.saveGameState(SAVE_FILE_NAME, gameBoard, objectPlacer, level, ghost1, ghost2);
                 ghostMovement1.stopMovement();
                 ghostMovement2.stopMovement();
@@ -154,7 +153,7 @@ public abstract class LevelBase {
             RenderMessage.usingSwordToSaveYourself();
             playerController.setSaved(false);
 
-        } else if (playerController.isTransition() && getLevel(objectPlacer) == 1) {
+        } else if (playerController.isTransition() && getLevel() == 1) {
             RenderMessage.transitionToTheNextLevel();
             ghostMovement1.stopMovement();
             ghostMovement2.stopMovement();
@@ -162,7 +161,7 @@ public abstract class LevelBase {
             level2.displayLevel(stage);
             playerController.setTransition(false);
 
-        } else if (playerController.transition && getLevel(objectPlacer) == 2) {
+        } else if (playerController.transition && getLevel() == 2) {
             RenderMessage.displayVictory();
             playerController.setVictory(true);
 
@@ -196,16 +195,5 @@ public abstract class LevelBase {
         }
     }
 
-    /**
-     * Gets the level based on the provided ObjectPlacerBase instance.
-     * If the ObjectPlacerBase instance is an instance of ObjectPlacer_Level2.
-     * the level is set to 2, otherwise it defaults to 1.
-     * @param objectPlacer The ObjectPlacerBase instance to determine the level from.
-     * @return The level of the ObjectPlacerBase instance (1 if ObjectPlacer_Level1, 2 if ObjectPlacer_Level2).
-     */
-    private static int getLevel(ObjectPlacerBase objectPlacer) {
-        int level = 1;
-        if (objectPlacer instanceof ObjectPlacer_Level2) level = 2;
-        return level;
-    }
+    public abstract int getLevel();
 }
